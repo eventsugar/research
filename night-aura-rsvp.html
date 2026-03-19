@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Night Aura — RSVP</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@300;400;500;600;700&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07050f;--bg2:#0f0b1a;--bg3:#16102a;
+  --accent:#c8f03c;--aqua:#2dd4c8;--beige:#f5f0e8;
+  --pink:#e879f9;--purple:#a855f7;
+  --white:#fff;--black:#07050f;
+  --grey:#8a8a7a;--border:rgba(200,240,60,0.2);
+  --red:#ff4444;--gold:#f5c842;--orange:#fb923c;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--beige);font-family:'Rajdhani',sans-serif;min-height:100vh;}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 60% 50% at 50% -10%,rgba(168,85,247,0.15) 0%,transparent 60%),radial-gradient(ellipse 40% 30% at 10% 80%,rgba(200,240,60,0.06) 0%,transparent 60%),radial-gradient(ellipse 40% 30% at 90% 60%,rgba(45,212,200,0.05) 0%,transparent 60%);pointer-events:none;z-index:0;}
+.particles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.particle{position:absolute;border-radius:50%;animation:floatUp linear infinite;}
+@keyframes floatUp{0%{transform:translateY(100vh) scale(1);opacity:0;}10%{opacity:1;}90%{opacity:0.4;}100%{transform:translateY(-100px) scale(0.2);opacity:0;}}
+.wrap{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:24px 16px 60px;}
+.header{text-align:center;padding:32px 0 28px;}
+.header-eyebrow{font-size:10px;letter-spacing:4px;color:var(--purple);text-transform:uppercase;margin-bottom:8px;}
+.header-title{font-family:'Cinzel',serif;font-size:42px;font-weight:700;line-height:0.9;margin-bottom:4px;}
+.header-title .night{color:var(--white);text-shadow:0 0 30px rgba(168,85,247,0.5);}
+.header-title .aura{color:var(--accent);text-shadow:0 0 30px rgba(200,240,60,0.6);display:block;}
+.header-sub{font-size:12px;color:var(--grey);letter-spacing:2px;margin-top:10px;}
+.header-details{display:flex;justify-content:center;gap:20px;margin-top:16px;flex-wrap:wrap;}
+.hd-item{text-align:center;}
+.hd-val{font-family:'Bebas Neue';font-size:18px;color:var(--beige);letter-spacing:1px;}
+.hd-label{font-size:9px;letter-spacing:2px;color:var(--grey);text-transform:uppercase;}
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:20px 0;}
+.steps{display:flex;gap:0;margin-bottom:24px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+.step{flex:1;padding:10px 6px;text-align:center;transition:all 0.3s;position:relative;}
+.step.active{background:rgba(200,240,60,0.1);}
+.step-num{font-family:'Bebas Neue';font-size:20px;color:var(--grey);line-height:1;}
+.step.active .step-num{color:var(--accent);}
+.step.done .step-num{color:var(--aqua);}
+.step-label{font-size:9px;letter-spacing:1px;color:var(--grey);text-transform:uppercase;}
+.step.active .step-label{color:var(--accent);}
+.step.done .step-label{color:var(--aqua);}
+.step-bar{position:absolute;bottom:0;left:0;right:0;height:2px;background:transparent;}
+.step.active .step-bar{background:var(--accent);}
+.step.done .step-bar{background:var(--aqua);}
+.form-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:22px;margin-bottom:16px;}
+.form-card-title{font-family:'Bebas Neue';font-size:20px;letter-spacing:2px;color:var(--accent);margin-bottom:16px;}
+.form-group{margin-bottom:14px;}
+.form-label{font-size:10px;letter-spacing:2px;color:var(--grey);text-transform:uppercase;margin-bottom:6px;display:block;}
+.form-input{width:100%;padding:12px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--beige);font-family:'Rajdhani',sans-serif;font-size:15px;outline:none;transition:border-color 0.2s;}
+.form-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(200,240,60,0.08);}
+.form-input::placeholder{color:var(--grey);}
+.form-input.error{border-color:var(--red);}
+.err-msg{font-size:11px;color:var(--red);margin-top:4px;display:none;}
+.err-msg.show{display:block;}
+.ticket-options{display:flex;flex-direction:column;gap:8px;}
+.ticket-opt{padding:12px 14px;border-radius:8px;cursor:pointer;border:1px solid var(--border);background:var(--bg3);transition:all 0.2s;display:flex;align-items:center;justify-content:space-between;}
+.ticket-opt:hover{border-color:var(--accent);}
+.ticket-opt.selected{border-color:var(--accent);background:rgba(200,240,60,0.08);box-shadow:0 0 12px rgba(200,240,60,0.1);}
+.to-left{display:flex;align-items:center;gap:10px;}
+.to-dot{width:8px;height:8px;border-radius:50%;background:var(--grey);flex-shrink:0;}
+.ticket-opt.selected .to-dot{background:var(--accent);box-shadow:0 0 8px var(--accent);}
+.to-name{font-size:15px;font-weight:700;}
+.to-desc{font-size:11px;color:var(--grey);margin-top:1px;}
+.to-price{font-family:'Bebas Neue';font-size:22px;color:var(--beige);flex-shrink:0;}
+.ticket-opt.selected .to-price{color:var(--accent);}
+.payment-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:22px;margin-bottom:16px;}
+.payment-title{font-family:'Bebas Neue';font-size:20px;letter-spacing:2px;color:var(--accent);margin-bottom:4px;}
+.payment-sub{font-size:12px;color:var(--grey);margin-bottom:18px;}
+.amount-display{text-align:center;padding:16px;background:rgba(200,240,60,0.06);border:1px solid rgba(200,240,60,0.2);border-radius:8px;margin-bottom:16px;}
+.amount-label{font-size:10px;letter-spacing:3px;color:var(--grey);text-transform:uppercase;}
+.amount-value{font-family:'Bebas Neue';font-size:48px;color:var(--gold);text-shadow:0 0 16px rgba(245,200,66,0.4);line-height:1.1;}
+.amount-currency{font-size:13px;color:var(--grey);}
+.momo-options{display:flex;gap:10px;margin-bottom:16px;}
+.momo-opt{flex:1;padding:14px 10px;border-radius:8px;cursor:pointer;border:2px solid var(--border);background:var(--bg3);text-align:center;transition:all 0.2s;}
+.momo-opt:hover{border-color:var(--accent);}
+.momo-opt.selected{border-color:var(--accent);background:rgba(200,240,60,0.06);}
+.momo-icon{font-size:26px;margin-bottom:4px;}
+.momo-name{font-family:'Bebas Neue';font-size:16px;letter-spacing:1px;}
+.momo-opt.airtel .momo-name{color:#ef4444;}
+.momo-opt.mtn .momo-name{color:#f5c842;}
+.momo-opt.selected .momo-name{color:var(--accent);}
+.momo-number{font-size:14px;font-weight:700;color:var(--beige);margin-top:2px;}
+.pay-steps{background:var(--bg3);border-radius:8px;padding:14px;margin-bottom:16px;}
+.pay-step{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px;}
+.pay-step:last-child{margin-bottom:0;}
+.pay-step-num{width:22px;height:22px;border-radius:50%;background:rgba(200,240,60,0.15);border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--accent);flex-shrink:0;margin-top:1px;}
+.pay-step-text{font-size:13px;color:var(--beige);line-height:1.4;}
+.pay-step-text strong{color:var(--accent);}
+.confirm-icon{text-align:center;font-size:56px;margin-bottom:10px;}
+.confirm-title{font-family:'Bebas Neue';font-size:28px;letter-spacing:3px;color:var(--accent);text-align:center;margin-bottom:4px;}
+.confirm-sub{font-size:13px;color:var(--grey);text-align:center;margin-bottom:16px;}
+.ticket-display{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center;margin-bottom:16px;}
+.td-event{font-size:10px;letter-spacing:3px;color:var(--grey);text-transform:uppercase;margin-bottom:4px;}
+.td-name{font-family:'Bebas Neue';font-size:26px;color:var(--white);letter-spacing:2px;}
+.td-tier{font-size:13px;color:var(--accent);font-weight:600;margin-top:2px;}
+.td-id{font-family:'Bebas Neue';font-size:13px;color:var(--grey);letter-spacing:1px;margin-top:6px;}
+.td-qr{display:flex;justify-content:center;background:white;border-radius:8px;padding:10px;margin:14px 0;}
+.td-details{display:flex;justify-content:space-around;margin-top:10px;flex-wrap:wrap;gap:8px;}
+.td-detail{text-align:center;}
+.tdd-val{font-family:'Bebas Neue';font-size:16px;color:var(--beige);}
+.tdd-label{font-size:9px;letter-spacing:1px;color:var(--grey);text-transform:uppercase;}
+.pending-badge{display:inline-block;background:rgba(245,200,66,0.15);border:1px solid var(--gold);color:var(--gold);padding:4px 12px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;}
+.save-hint{font-size:11px;color:var(--grey);text-align:center;margin-top:10px;}
+.btn{width:100%;padding:14px;border-radius:8px;font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;letter-spacing:2px;cursor:pointer;border:none;transition:all 0.2s;text-transform:uppercase;}
+.btn-primary{background:linear-gradient(135deg,var(--accent),#a8cc20);color:var(--black);box-shadow:0 0 20px rgba(200,240,60,0.25);}
+.btn-primary:hover{box-shadow:0 0 30px rgba(200,240,60,0.45);transform:translateY(-1px);}
+.btn-primary:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--grey);margin-top:10px;}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent);}
+.btn-aqua{background:linear-gradient(135deg,var(--aqua),#1ba89e);color:var(--black);margin-top:10px;}
+.footer{text-align:center;padding:20px 0;font-size:10px;color:var(--grey);letter-spacing:2px;}
+::-webkit-scrollbar{width:3px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--accent);border-radius:2px;}
+@media print{
+  body{background:#fff!important;color:#000!important;}
+  .particles,.steps,.header,.divider,.footer,.btn,#section-details,#section-payment{display:none!important;}
+  .ticket-display{border:2px solid #333!important;background:#fff!important;}
+  .td-name,.td-tier,.td-id{color:#000!important;}
+  .td-event{color:#666!important;}
+  .pending-badge{border:1px solid #333!important;color:#333!important;}
+  .confirm-title,.confirm-sub,.confirm-icon{color:#000!important;}
+}
+</style>
+</head>
+<body>
+<div class="particles" id="particles"></div>
+<div class="wrap">
+
+  <div class="header">
+    <div class="header-eyebrow">Sugar BaBy Presents</div>
+    <div class="header-title">
+      <span class="night">NIGHT</span>
+      <span class="aura">AURA</span>
+    </div>
+    <div class="header-sub">Official Ticket RSVP</div>
+    <div class="header-details">
+      <div class="hd-item"><div class="hd-val">APR 17</div><div class="hd-label">Date</div></div>
+      <div class="hd-item"><div class="hd-val">9 PM</div><div class="hd-label">Time</div></div>
+      <div class="hd-item"><div class="hd-val">Bevan's</div><div class="hd-label">Venue</div></div>
+      <div class="hd-item"><div class="hd-val">Kamonkoli</div><div class="hd-label">Location</div></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="steps">
+    <div class="step active" id="step-1"><div class="step-num">1</div><div class="step-label">Details</div><div class="step-bar"></div></div>
+    <div class="step" id="step-2"><div class="step-num">2</div><div class="step-label">Pay</div><div class="step-bar"></div></div>
+    <div class="step" id="step-3"><div class="step-num">3</div><div class="step-label">Confirm</div><div class="step-bar"></div></div>
+  </div>
+
+  <!-- STEP 1 -->
+  <div id="section-details">
+    <div class="form-card">
+      <div class="form-card-title">Your Details</div>
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input class="form-input" id="f-name" placeholder="Enter your full name" autocomplete="off">
+        <div class="err-msg" id="err-name">Please enter your name</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Phone Number</label>
+        <input class="form-input" id="f-phone" placeholder="07XX XXX XXX" type="tel">
+        <div class="err-msg" id="err-phone">Please enter a valid phone number</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Select Ticket</label>
+        <div class="ticket-options">
+          <div class="ticket-opt" onclick="selectTicket(this,'Basic','Early Bird','SB-NA-BSC-EB',20000)">
+            <div class="to-left"><div class="to-dot"></div><div><div class="to-name" style="color:#c8f03c">Basic — Early Bird</div><div class="to-desc">Sodas · Water · Fries · Smokies</div></div></div>
+            <div class="to-price">20K</div>
+          </div>
+          <div class="ticket-opt" onclick="selectTicket(this,'Basic','Regular','SB-NA-BSC-RG',25000)">
+            <div class="to-left"><div class="to-dot"></div><div><div class="to-name" style="color:#a8cc20">Basic — Regular</div><div class="to-desc">Sodas · Water · Fries · Smokies</div></div></div>
+            <div class="to-price">25K</div>
+          </div>
+          <div class="ticket-opt" onclick="selectTicket(this,'Aura Pass','VIP','SB-NA-APC',35000)">
+            <div class="to-left"><div class="to-dot"></div><div><div class="to-name" style="color:#2dd4c8">Aura Pass — VIP</div><div class="to-desc">Basic + Beers + Table</div></div></div>
+            <div class="to-price">35K</div>
+          </div>
+          <div class="ticket-opt" onclick="selectTicket(this,'Aura Farmer','VVIP','SB-NA-AFC',50000)">
+            <div class="to-left"><div class="to-dot"></div><div><div class="to-name" style="color:#f5f0e8">Aura Farmer — VVIP</div><div class="to-desc">Aura Pass + Private Room</div></div></div>
+            <div class="to-price">50K</div>
+          </div>
+        </div>
+        <div class="err-msg" id="err-ticket">Please select a ticket</div>
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="goToPayment()">Continue to Payment →</button>
+  </div>
+
+  <!-- STEP 2 -->
+  <div id="section-payment" style="display:none;">
+    <div class="payment-card">
+      <div class="payment-title">Make Payment</div>
+      <div class="payment-sub">Send the exact amount via Mobile Money then enter your transaction ID below</div>
+      <div class="amount-display">
+        <div class="amount-label">Amount Due</div>
+        <div class="amount-value" id="pay-amount">0</div>
+        <div class="amount-currency">Uganda Shillings (UGX)</div>
+      </div>
+      <div style="font-size:10px;letter-spacing:2px;color:var(--grey);text-transform:uppercase;margin-bottom:8px;">Select Your Network</div>
+      <div class="momo-options">
+        <div class="momo-opt airtel" onclick="selectMomo(this,'Airtel','0750741502','*185#')">
+          <div class="momo-icon">📱</div>
+          <div class="momo-name">Airtel</div>
+          <div class="momo-number">0750 741 502</div>
+        </div>
+        <div class="momo-opt mtn" onclick="selectMomo(this,'MTN','0769115143','*165#')">
+          <div class="momo-icon">📲</div>
+          <div class="momo-name">MTN</div>
+          <div class="momo-number">0769 115 143</div>
+        </div>
+      </div>
+      <div class="pay-steps" id="pay-instructions" style="display:none;">
+        <div class="pay-step"><div class="pay-step-num">1</div><div class="pay-step-text">Dial <strong id="pay-ussd">*185#</strong> or open your MoMo app</div></div>
+        <div class="pay-step"><div class="pay-step-num">2</div><div class="pay-step-text">Send <strong id="pay-amount-2">UGX 0</strong> to number <strong id="pay-number">0750741502</strong></div></div>
+        <div class="pay-step"><div class="pay-step-num">3</div><div class="pay-step-text">Enter your PIN to confirm the transaction</div></div>
+        <div class="pay-step"><div class="pay-step-num">4</div><div class="pay-step-text">Copy the <strong>Transaction ID</strong> from your confirmation SMS and paste it below</div></div>
+      </div>
+      <div class="form-group" id="txn-group" style="display:none;">
+        <label class="form-label">MoMo Transaction ID</label>
+        <input class="form-input" id="f-txn" placeholder="e.g. MP250417XXXXXXXX" autocomplete="off" style="font-family:monospace;letter-spacing:1px;">
+        <div class="err-msg" id="err-txn">Please enter your transaction ID</div>
+      </div>
+    </div>
+    <button class="btn btn-primary" id="submit-btn" onclick="submitRSVP()" disabled>Select a Network First</button>
+    <button class="btn btn-outline" onclick="goBack()">← Go Back</button>
+  </div>
+
+  <!-- STEP 3 -->
+  <div id="section-confirm" style="display:none;">
+    <div class="form-card" style="border-color:rgba(200,240,60,0.3);">
+      <div class="confirm-icon">🎉</div>
+      <div class="confirm-title">You're In!</div>
+      <div class="confirm-sub">Your RSVP is submitted. Screenshot your ticket below — you'll need it at the door.</div>
+      <div style="text-align:center;margin-bottom:14px;"><span class="pending-badge">⏳ Pending Verification</span></div>
+      <div class="ticket-display">
+        <div class="td-event">Night Aura · Apr 17, 2026</div>
+        <div class="td-name" id="conf-name"></div>
+        <div class="td-tier" id="conf-tier"></div>
+        <div class="td-qr" id="conf-qr"></div>
+        <div class="td-id" id="conf-id"></div>
+        <div class="td-details">
+          <div class="td-detail"><div class="tdd-val">9 PM</div><div class="tdd-label">Time</div></div>
+          <div class="td-detail"><div class="tdd-val">APR 17</div><div class="tdd-label">Date</div></div>
+          <div class="td-detail"><div class="tdd-val">Bevan's</div><div class="tdd-label">Venue</div></div>
+        </div>
+      </div>
+      <div class="save-hint">📸 Screenshot this page to save your ticket · Your ticket will be activated once payment is confirmed</div>
+    </div>
+    <button class="btn btn-aqua" onclick="window.print()">🖨️ Print / Save Ticket</button>
+    <button class="btn btn-outline" onclick="location.reload()">Register Another Person</button>
+  </div>
+
+</div>
+<div class="footer">Night Aura · Sugar BaBy Presents · Bevan's Lounge, Kamonkoli · April 17, 2026</div>
+
+<script>
+const SCRIPT_URL='https://script.google.com/macros/s/AKfycby-GWIueVdm_wBJaKmeatAaN2ksFzRVJnHbZLAFYMXge4NBwkBtLkSGsJ4hX4VBsLa8/exec';
+let selTier=null,selType=null,selPrefix=null,selPrice=0,selMomo=null,selNumber=null,genId=null;
+
+// Particles
+const pc=document.getElementById('particles');
+const cols=['rgba(200,240,60,0.6)','rgba(45,212,200,0.5)','rgba(168,85,247,0.5)','rgba(232,121,249,0.4)','rgba(255,255,255,0.3)'];
+for(let i=0;i<25;i++){
+  const p=document.createElement('div'); p.className='particle';
+  const s=Math.random()*3+1;
+  p.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}%;bottom:-10px;background:${cols[Math.floor(Math.random()*cols.length)]};animation-duration:${Math.random()*10+8}s;animation-delay:${Math.random()*10}s;`;
+  pc.appendChild(p);
+}
+
+function selectTicket(el,tier,type,prefix,price){
+  document.querySelectorAll('.ticket-opt').forEach(o=>o.classList.remove('selected'));
+  el.classList.add('selected');
+  selTier=tier; selType=type; selPrefix=prefix; selPrice=price;
+  document.getElementById('err-ticket').classList.remove('show');
+}
+
+function selectMomo(el,name,number,ussd){
+  document.querySelectorAll('.momo-opt').forEach(o=>o.classList.remove('selected'));
+  el.classList.add('selected');
+  selMomo=name; selNumber=number;
+  document.getElementById('pay-instructions').style.display='block';
+  document.getElementById('txn-group').style.display='block';
+  document.getElementById('pay-ussd').textContent=ussd;
+  document.getElementById('pay-amount-2').textContent='UGX '+selPrice.toLocaleString();
+  document.getElementById('pay-number').textContent=number;
+  checkReady();
+}
+
+function checkReady(){
+  const txn=document.getElementById('f-txn').value.trim();
+  const btn=document.getElementById('submit-btn');
+  if(selMomo&&txn){btn.disabled=false;btn.textContent='Submit RSVP ✓';}
+  else{btn.disabled=true;btn.textContent=!selMomo?'Select a Network First':'Enter Transaction ID First';}
+}
+document.getElementById('f-txn').addEventListener('input',checkReady);
+
+function goToPayment(){
+  const name=document.getElementById('f-name').value.trim();
+  const phone=document.getElementById('f-phone').value.trim();
+  let ok=true;
+  if(!name){document.getElementById('err-name').classList.add('show');document.getElementById('f-name').classList.add('error');ok=false;}
+  else{document.getElementById('err-name').classList.remove('show');document.getElementById('f-name').classList.remove('error');}
+  if(!phone||phone.length<10){document.getElementById('err-phone').classList.add('show');document.getElementById('f-phone').classList.add('error');ok=false;}
+  else{document.getElementById('err-phone').classList.remove('show');document.getElementById('f-phone').classList.remove('error');}
+  if(!selTier){document.getElementById('err-ticket').classList.add('show');ok=false;}
+  if(!ok) return;
+  genId=`${selPrefix}-R${String(Math.floor(Math.random()*9000)+1000)}`;
+  document.getElementById('pay-amount').textContent=selPrice.toLocaleString();
+  setStep(2);
+  document.getElementById('section-details').style.display='none';
+  document.getElementById('section-payment').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function goBack(){
+  setStep(1);
+  document.getElementById('section-payment').style.display='none';
+  document.getElementById('section-details').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+async function submitRSVP(){
+  const txn=document.getElementById('f-txn').value.trim();
+  if(!txn){document.getElementById('err-txn').classList.add('show');return;}
+  document.getElementById('err-txn').classList.remove('show');
+  const btn=document.getElementById('submit-btn');
+  btn.disabled=true; btn.textContent='Submitting...';
+  const name=document.getElementById('f-name').value.trim();
+  const phone=document.getElementById('f-phone').value.trim();
+  try{
+    const params=new URLSearchParams({
+      action:'rsvp',id:genId,name,phone,
+      tier:selTier,type:selType,price:selPrice,
+      momo:selMomo,momoNumber:selNumber,
+      txn,time:new Date().toLocaleString()
+    });
+    await fetch(`${SCRIPT_URL}?${params.toString()}`);
+  }catch(e){}
+  // Show ticket regardless
+  setStep(3);
+  document.getElementById('section-payment').style.display='none';
+  document.getElementById('section-confirm').style.display='block';
+  document.getElementById('conf-name').textContent=name.toUpperCase();
+  document.getElementById('conf-tier').textContent=`${selTier} — ${selType} · UGX ${selPrice.toLocaleString()}`;
+  document.getElementById('conf-id').textContent=genId;
+  const qrEl=document.getElementById('conf-qr'); qrEl.innerHTML='';
+  try{new QRCode(qrEl,{text:genId,width:160,height:160,colorDark:'#000',colorLight:'#fff',correctLevel:QRCode.CorrectLevel.H});}catch(e){}
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function setStep(n){
+  for(let i=1;i<=3;i++){
+    const s=document.getElementById('step-'+i);
+    s.classList.remove('active','done');
+    if(i<n) s.classList.add('done');
+    if(i===n) s.classList.add('active');
+  }
+}
+</script>
+</body>
+</html>
