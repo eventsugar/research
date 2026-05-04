@@ -2,980 +2,473 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Night Aura — Ticket System</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@300;400;500;600;700&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Research Methods in IT — Exam Study Guide</title>
 <style>
-:root {
-  --bg:#0a0a08; --bg2:#141410; --bg3:#1c1c17;
-  --accent:#c8f03c; --aqua:#2dd4c8; --beige:#f5f0e8;
-  --white:#ffffff; --black:#0a0a08; --grey:#8a8a7a;
-  --border:rgba(200,240,60,0.2); --red:#ff4444; --gold:#f5c842;
-}
-*{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--bg);color:var(--beige);font-family:'Rajdhani',sans-serif;min-height:100vh;overflow-x:hidden;}
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 50% 35% at 15% 15%,rgba(200,240,60,0.05) 0%,transparent 60%),radial-gradient(ellipse 40% 30% at 85% 80%,rgba(45,212,200,0.04) 0%,transparent 60%);pointer-events:none;z-index:0;}
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; font-size: 14px; color: #1a1a1a; background: #f4f6f9; }
 
-.nav{position:sticky;top:0;z-index:100;background:rgba(10,10,8,0.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 16px;display:flex;align-items:center;justify-content:space-between;height:52px;}
-.nav-brand{font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:var(--accent);text-shadow:0 0 16px rgba(200,240,60,0.4);letter-spacing:2px;}
-.nav-brand span{color:var(--aqua);}
-.nav-tabs{display:flex;gap:3px;}
-.nav-tab{padding:5px 11px;border-radius:4px;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border:1px solid transparent;transition:all 0.2s;color:var(--grey);background:transparent;font-family:'Rajdhani',sans-serif;}
-.nav-tab:hover{color:var(--beige);border-color:var(--border);}
-.nav-tab.active{background:rgba(200,240,60,0.1);border-color:var(--accent);color:var(--accent);box-shadow:0 0 10px rgba(200,240,60,0.15);}
-
-.page{display:none;padding:20px 16px;position:relative;z-index:1;}
-.page.active{display:block;}
-.page-title{font-family:'Bebas Neue',cursive;font-size:34px;letter-spacing:3px;color:var(--white);text-shadow:0 0 24px rgba(200,240,60,0.3);line-height:1;}
-.page-sub{font-size:12px;color:var(--grey);margin-top:3px;letter-spacing:1px;}
-.page-header{margin-bottom:20px;}
-
-.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:20px;}
-.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center;position:relative;overflow:hidden;}
-.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);}
-.stat-num{font-family:'Bebas Neue',cursive;font-size:38px;line-height:1;color:var(--accent);text-shadow:0 0 16px rgba(200,240,60,0.4);}
-.stat-label{font-size:10px;letter-spacing:2px;color:var(--grey);text-transform:uppercase;margin-top:3px;}
-
-.revenue-card{background:linear-gradient(135deg,rgba(200,240,60,0.08),rgba(45,212,200,0.05));border:1px solid rgba(200,240,60,0.25);border-radius:10px;padding:18px;text-align:center;margin-bottom:18px;}
-.rev-label{font-size:10px;letter-spacing:3px;color:var(--grey);text-transform:uppercase;}
-.rev-amount{font-family:'Bebas Neue';font-size:46px;color:var(--gold);text-shadow:0 0 16px rgba(245,200,66,0.4);line-height:1.1;}
-.rev-currency{font-size:12px;color:var(--grey);}
-
-.tier-cards{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;}
-.tier-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:all 0.2s;}
-.tier-card:hover{border-color:var(--accent);transform:translateX(3px);}
-.tier-dot{width:9px;height:9px;border-radius:50%;}
-.tier-name{font-size:15px;font-weight:700;letter-spacing:1px;}
-.tier-count{font-size:11px;color:var(--grey);}
-.tier-sold{font-family:'Bebas Neue';font-size:20px;}
-.tier-total{font-size:10px;color:var(--grey);}
-.tier-info{display:flex;align-items:center;gap:10px;}
-.tier-stats{text-align:right;}
-
-.section-title{font-size:10px;letter-spacing:3px;color:var(--grey);text-transform:uppercase;margin-bottom:10px;padding-bottom:7px;border-bottom:1px solid var(--border);}
-.search-box{width:100%;padding:9px 13px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;color:var(--beige);font-family:'Rajdhani',sans-serif;font-size:14px;margin-bottom:10px;outline:none;transition:border-color 0.2s;}
-.search-box:focus{border-color:var(--accent);}
-.search-box::placeholder{color:var(--grey);}
-.ticket-filters{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;}
-.filter-btn{padding:4px 11px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:1px;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--grey);transition:all 0.2s;font-family:'Rajdhani',sans-serif;}
-.filter-btn.active,.filter-btn:hover{background:rgba(200,240,60,0.1);border-color:var(--accent);color:var(--accent);}
-
-.ticket-list{display:flex;flex-direction:column;gap:7px;max-height:420px;overflow-y:auto;}
-.ticket-item{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:11px 13px;display:flex;align-items:center;justify-content:space-between;transition:all 0.2s;}
-.ticket-item:hover{border-color:var(--accent);}
-.ticket-id{font-family:'Bebas Neue';font-size:13px;letter-spacing:1px;color:var(--accent);}
-.ticket-meta{font-size:11px;color:var(--grey);margin-top:2px;}
-.ticket-actions{display:flex;gap:5px;align-items:center;}
-
-.badge{padding:2px 7px;border-radius:3px;font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;}
-.badge-paid{background:rgba(200,240,60,0.12);color:var(--accent);border:1px solid rgba(200,240,60,0.3);}
-.badge-unpaid{background:rgba(245,200,66,0.12);color:var(--gold);border:1px solid rgba(245,200,66,0.3);}
-.badge-scanned{background:rgba(255,68,68,0.12);color:var(--red);border:1px solid rgba(255,68,68,0.3);}
-.badge-unused{background:rgba(45,212,200,0.12);color:var(--aqua);border:1px solid rgba(45,212,200,0.3);}
-.badge-basic{background:rgba(200,240,60,0.1);color:var(--accent);}
-.badge-aurapass{background:rgba(45,212,200,0.1);color:var(--aqua);}
-.badge-aurafarmer{background:rgba(245,240,232,0.1);color:var(--beige);}
-.badge-lastminute{background:rgba(251,146,60,0.12);color:#fb923c;border:1px solid rgba(251,146,60,0.3);}
-
-.btn{padding:7px 16px;border-radius:5px;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;cursor:pointer;border:none;transition:all 0.2s;text-transform:uppercase;}
-.btn-primary{background:linear-gradient(135deg,var(--accent),#a8cc20);color:var(--black);box-shadow:0 0 14px rgba(200,240,60,0.25);}
-.btn-primary:hover{box-shadow:0 0 22px rgba(200,240,60,0.45);transform:translateY(-1px);}
-.btn-aqua{background:linear-gradient(135deg,var(--aqua),#1ba89e);color:var(--black);box-shadow:0 0 14px rgba(45,212,200,0.25);}
-.btn-aqua:hover{box-shadow:0 0 22px rgba(45,212,200,0.45);transform:translateY(-1px);}
-.btn-outline{background:transparent;border:1px solid var(--border);color:var(--grey);}
-.btn-outline:hover{border-color:var(--accent);color:var(--accent);}
-.btn-sm{padding:4px 10px;font-size:10px;}
-.btn-danger{background:rgba(255,68,68,0.15);border:1px solid var(--red);color:var(--red);}
-.btn-success{background:rgba(200,240,60,0.12);border:1px solid var(--accent);color:var(--accent);}
-.btn-full{width:100%;text-align:center;padding:13px;font-size:14px;}
-
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);backdrop-filter:blur(6px);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;}
-.modal-overlay.open{display:flex;}
-.modal{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:22px;width:100%;max-width:380px;position:relative;box-shadow:0 0 50px rgba(200,240,60,0.1);}
-.modal-title{font-family:'Bebas Neue';font-size:22px;letter-spacing:2px;color:var(--accent);margin-bottom:14px;}
-.modal-close{position:absolute;top:14px;right:14px;background:none;border:none;color:var(--grey);font-size:18px;cursor:pointer;}
-.modal-close:hover{color:var(--beige);}
-.qr-display{display:flex;justify-content:center;padding:14px;background:white;border-radius:8px;margin:14px 0;}
-.ticket-detail-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px;}
-.ticket-detail-row:last-child{border:none;}
-.tdl{color:var(--grey);}
-.tdr{font-weight:600;}
-
-.form-group{margin-bottom:12px;}
-.form-label{font-size:10px;letter-spacing:2px;color:var(--grey);text-transform:uppercase;margin-bottom:5px;display:block;}
-.form-input{width:100%;padding:9px 13px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--beige);font-family:'Rajdhani',sans-serif;font-size:14px;outline:none;transition:border-color 0.2s;}
-.form-input:focus{border-color:var(--accent);}
-.form-select{width:100%;padding:9px 13px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--beige);font-family:'Rajdhani',sans-serif;font-size:14px;outline:none;cursor:pointer;}
-
-.scanner-wrap{display:flex;flex-direction:column;align-items:center;gap:18px;}
-.scanner-box{width:100%;max-width:320px;aspect-ratio:1;background:var(--bg2);border:2px solid var(--border);border-radius:12px;overflow:hidden;position:relative;}
-.scanner-box video,.scanner-box canvas{width:100%;height:100%;object-fit:cover;}
-.scanner-corners{position:absolute;inset:0;pointer-events:none;border-radius:10px;overflow:hidden;}
-.scanner-corners::before,.scanner-corners::after{content:'';position:absolute;width:28px;height:28px;border-color:var(--accent);border-style:solid;}
-.scanner-corners::before{top:10px;left:10px;border-width:3px 0 0 3px;}
-.scanner-corners::after{bottom:10px;right:10px;border-width:0 3px 3px 0;}
-.scan-line{position:absolute;left:10%;right:10%;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);animation:scanMove 2s ease-in-out infinite;}
-@keyframes scanMove{0%,100%{top:10%}50%{top:85%}}
-.scanner-placeholder{width:100%;max-width:320px;aspect-ratio:1;background:var(--bg2);border:2px dashed var(--border);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--grey);}
-.scanner-placeholder .icon{font-size:44px;}
-.scan-result{width:100%;max-width:320px;border-radius:12px;padding:18px;text-align:center;display:none;}
-.scan-result.valid{display:block;background:rgba(200,240,60,0.08);border:2px solid var(--accent);box-shadow:0 0 28px rgba(200,240,60,0.15);}
-.scan-result.invalid{display:block;background:rgba(255,68,68,0.08);border:2px solid var(--red);box-shadow:0 0 28px rgba(255,68,68,0.15);}
-.scan-icon{font-size:52px;line-height:1;margin-bottom:6px;}
-.scan-status{font-family:'Bebas Neue';font-size:26px;letter-spacing:3px;}
-.scan-result.valid .scan-status{color:var(--accent);}
-.scan-result.invalid .scan-status{color:var(--red);}
-.scan-ticket-id{font-size:12px;color:var(--grey);margin-top:5px;font-family:'Bebas Neue';letter-spacing:1px;}
-.scan-detail{font-size:12px;color:var(--grey);margin-top:3px;}
-.scan-log{display:flex;flex-direction:column;gap:5px;margin-top:14px;max-height:180px;overflow-y:auto;}
-.scan-log-item{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:7px 11px;display:flex;justify-content:space-between;align-items:center;font-size:12px;}
-.sli-id{font-family:'Bebas Neue';letter-spacing:1px;font-size:13px;}
-.sli-time{color:var(--grey);font-size:10px;}
-.manual-scan-wrap{width:100%;max-width:320px;}
-
-.empty-state{text-align:center;padding:28px;color:var(--grey);font-size:14px;}
-::-webkit-scrollbar{width:3px;}
-::-webkit-scrollbar-track{background:var(--bg);}
-::-webkit-scrollbar-thumb{background:var(--accent);border-radius:2px;}
-
-.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 18px;font-size:13px;font-weight:600;z-index:300;transition:transform 0.3s;white-space:nowrap;}
-.toast.show{transform:translateX(-50%) translateY(0);}
-.toast.success{border-color:var(--accent);color:var(--accent);}
-.toast.error{border-color:var(--red);color:var(--red);}
-
-/* ── QR PRINT GRID (screen) ── */
-.qr-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:16px;}
-.qr-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center;}
-.qr-card-qr{display:flex;justify-content:center;background:white;border-radius:5px;padding:6px;margin-bottom:6px;}
-.qr-card-id{font-family:'Bebas Neue';font-size:10px;letter-spacing:1px;color:var(--accent);word-break:break-all;}
-.qr-card-tier{font-size:10px;color:var(--grey);margin-top:2px;}
-.qr-card-event{font-size:9px;color:var(--grey);opacity:0.6;}
-.print-controls{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;padding:0 16px 12px;}
-
-/* ── PRINT STYLES ── */
-@media print {
-  *{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
-  body,html{background:#fff!important;color:#000!important;margin:0;padding:0;}
-  .nav,.no-print{display:none!important;}
-  .page{display:none!important;}
-  #page-print{display:block!important;padding:0!important;}
-  .print-controls{display:none!important;}
-  .page-header{display:none!important;}
-  .qr-grid{
-    display:grid!important;
-    grid-template-columns:repeat(4,1fr)!important;
-    gap:6px!important;
-    padding:8px!important;
+  .cover {
+    background: linear-gradient(135deg, #1a3a5c 0%, #0d6e4b 100%);
+    color: white; text-align: center; padding: 60px 40px;
   }
-  .qr-card{
-    background:#fff!important;
-    border:1px solid #ddd!important;
-    border-radius:4px!important;
-    padding:6px!important;
-    page-break-inside:avoid!important;
-    break-inside:avoid!important;
-  }
-  .qr-card-qr{background:#fff!important;padding:3px!important;margin-bottom:4px!important;}
-  .qr-card-qr img,.qr-card-qr canvas{width:80px!important;height:80px!important;}
-  .qr-card-id{color:#000!important;font-size:7px!important;font-family:monospace!important;}
-  .qr-card-tier{color:#444!important;font-size:7px!important;}
-  .qr-card-event{color:#888!important;font-size:6px!important;}
-}
+  .cover h1 { font-size: 2.4em; font-weight: 900; margin-bottom: 12px; }
+  .cover .sub { font-size: 1.1em; opacity: 0.85; margin-bottom: 8px; }
+  .cover .badge { display: inline-block; background: #f5c518; color: #1a1a1a; font-weight: bold;
+    padding: 6px 18px; border-radius: 20px; margin-top: 18px; font-size: 0.95em; }
 
-/* ── LOGIN ── */
-#login-screen{position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;align-items:center;justify-content:center;padding:24px;}
-#login-screen.hidden{display:none;}
-.login-box{width:100%;max-width:360px;background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:32px 28px;box-shadow:0 0 60px rgba(200,240,60,0.08);}
-.login-logo{text-align:center;margin-bottom:28px;}
-.login-logo-title{font-family:'Cinzel',serif;font-size:28px;font-weight:700;color:var(--accent);text-shadow:0 0 20px rgba(200,240,60,0.5);letter-spacing:3px;}
-.login-logo-title span{color:var(--aqua);}
-.login-logo-sub{font-size:11px;letter-spacing:3px;color:var(--grey);text-transform:uppercase;margin-top:4px;}
-.login-error{background:rgba(255,68,68,0.1);border:1px solid var(--red);border-radius:6px;padding:10px 14px;font-size:13px;color:var(--red);margin-bottom:14px;display:none;text-align:center;}
-.login-error.show{display:block;}
-.login-footer{text-align:center;font-size:10px;color:var(--grey);margin-top:20px;letter-spacing:1px;}
-.nav-user{font-size:11px;color:var(--grey);display:flex;align-items:center;gap:8px;}
-.nav-user span{color:var(--accent);font-weight:700;}
-.btn-logout{padding:4px 10px;border-radius:4px;font-size:10px;font-weight:600;letter-spacing:1px;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--grey);font-family:'Rajdhani',sans-serif;text-transform:uppercase;transition:all 0.2s;}
-.btn-logout:hover{border-color:var(--red);color:var(--red);}
-/* ── VERIFY PAGE ── */
-.rsvp-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px;transition:border-color 0.2s;}
-.rsvp-card:hover{border-color:var(--accent);}
-.rsvp-card.approved{border-color:rgba(200,240,60,0.4);background:rgba(200,240,60,0.04);}
-.rsvp-card.rejected{border-color:rgba(255,68,68,0.3);background:rgba(255,68,68,0.03);}
-.rsvp-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
-.rsvp-name{font-family:'Bebas Neue';font-size:18px;letter-spacing:1px;color:var(--white);}
-.rsvp-time{font-size:10px;color:var(--grey);}
-.rsvp-meta{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;}
-.rsvp-row{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid rgba(200,240,60,0.08);}
-.rsvp-row:last-child{border:none;}
-.rsvp-row-label{color:var(--grey);}
-.rsvp-row-val{font-weight:600;color:var(--beige);}
-.rsvp-row-val.txn{font-family:monospace;font-size:11px;color:var(--aqua);}
-.rsvp-actions{display:flex;gap:8px;margin-top:10px;}
-.rsvp-actions .btn{padding:8px;font-size:11px;flex:1;}
-.rsvp-status{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:3px 8px;border-radius:3px;}
-.rsvp-status.pending{background:rgba(245,200,66,0.15);color:var(--gold);border:1px solid rgba(245,200,66,0.3);}
-.rsvp-status.approved{background:rgba(200,240,60,0.12);color:var(--accent);border:1px solid rgba(200,240,60,0.3);}
-.rsvp-status.rejected{background:rgba(255,68,68,0.12);color:var(--red);border:1px solid rgba(255,68,68,0.3);}
-.assign-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:10px;}
-.assign-wrap-title{font-size:10px;letter-spacing:2px;color:var(--grey);text-transform:uppercase;margin-bottom:8px;}
+  .toc { background: #fff; border-left: 5px solid #0d6e4b; margin: 30px auto; max-width: 900px;
+    padding: 24px 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+  .toc h2 { color: #1a3a5c; font-size: 1.2em; margin-bottom: 14px; }
+  .toc ol { padding-left: 20px; }
+  .toc li { margin: 5px 0; }
+  .toc a { color: #0d6e4b; text-decoration: none; font-weight: 500; }
+  .toc a:hover { text-decoration: underline; }
+
+  .container { max-width: 900px; margin: 0 auto; padding: 0 20px 60px; }
+
+  .topic { background: #fff; border-radius: 10px; margin: 24px 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07); overflow: hidden; }
+  .topic-header { background: #1a3a5c; color: white; padding: 14px 22px; display: flex; align-items: center; gap: 12px; }
+  .topic-header .num { background: #f5c518; color: #1a1a1a; font-weight: 900;
+    width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center;
+    justify-content: center; font-size: 0.95em; flex-shrink: 0; }
+  .topic-header h2 { font-size: 1.1em; font-weight: 700; }
+  .topic-body { padding: 20px 22px; }
+
+  h3 { color: #1a3a5c; font-size: 1em; margin: 16px 0 8px; border-bottom: 2px solid #e8f0e9; padding-bottom: 4px; }
+
+  ul, ol { padding-left: 20px; margin: 8px 0; }
+  li { margin: 4px 0; line-height: 1.5; }
+
+  p { line-height: 1.6; margin: 8px 0; }
+
+  .callout { background: #e8f4ec; border-left: 4px solid #0d6e4b; padding: 10px 14px;
+    border-radius: 0 6px 6px 0; margin: 12px 0; font-size: 0.93em; }
+  .callout strong { color: #0d6e4b; }
+
+  .warn { background: #fff8e1; border-left: 4px solid #f5c518; padding: 10px 14px;
+    border-radius: 0 6px 6px 0; margin: 12px 0; font-size: 0.93em; }
+
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.93em; }
+  th { background: #1a3a5c; color: white; padding: 9px 12px; text-align: left; }
+  td { padding: 8px 12px; border-bottom: 1px solid #e0e0e0; vertical-align: top; }
+  tr:nth-child(even) td { background: #f7f9fb; }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 12px 0; }
+  .card { background: #f0f6ff; border-radius: 8px; padding: 14px 16px; }
+  .card h4 { color: #1a3a5c; font-size: 0.95em; margin-bottom: 6px; }
+  .card ul { padding-left: 16px; font-size: 0.9em; }
+
+  .steps { counter-reset: steps; }
+  .step { display: flex; gap: 12px; margin: 8px 0; align-items: flex-start; }
+  .step-num { background: #0d6e4b; color: white; font-weight: bold; font-size: 0.85em;
+    width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center;
+    justify-content: center; flex-shrink: 0; margin-top: 2px; }
+
+  .smart { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0; }
+  .smart-item { background: #1a3a5c; color: white; border-radius: 8px; padding: 10px 14px; flex: 1; min-width: 100px; }
+  .smart-item .letter { font-size: 1.8em; font-weight: 900; color: #f5c518; line-height: 1; }
+  .smart-item .word { font-size: 0.8em; font-weight: 600; margin: 2px 0; }
+  .smart-item .desc { font-size: 0.75em; opacity: 0.85; }
+
+  .tag { display: inline-block; background: #e8f4ec; color: #0d6e4b; font-size: 0.78em;
+    font-weight: bold; padding: 2px 8px; border-radius: 12px; margin: 2px; }
+  .tag.q { background: #fff3cd; color: #856404; }
+
+  .assess { background: linear-gradient(135deg, #1a3a5c, #0d6e4b); color: white;
+    border-radius: 10px; padding: 20px 22px; margin: 24px 0; }
+  .assess h2 { font-size: 1.1em; margin-bottom: 14px; }
+  .assess table th { background: rgba(255,255,255,0.15); }
+  .assess table td { color: white; border-bottom-color: rgba(255,255,255,0.15); }
+  .assess table tr:nth-child(even) td { background: rgba(255,255,255,0.07); }
+  .big { font-size: 1.2em; font-weight: 900; color: #f5c518; }
+
+  footer { text-align: center; color: #888; font-size: 0.85em; padding: 20px; }
+
+  @media print {
+    body { background: white; font-size: 12px; }
+    .cover { padding: 30px; }
+    .topic { break-inside: avoid; }
+    .topic-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
 </style>
 </head>
 <body>
 
-<!-- LOGIN SCREEN -->
-<div id="login-screen">
-  <div class="login-box">
-    <div class="login-logo">
-      <div class="login-logo-title">NIGHT<span>AURA</span></div>
-      <div class="login-logo-sub">Ticket Management System</div>
-    </div>
-    <div class="login-error" id="login-error">Incorrect username or password</div>
-    <div class="form-group">
-      <label class="form-label">Username</label>
-      <input class="form-input" id="login-user" placeholder="Enter username" autocomplete="off">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Password</label>
-      <input class="form-input" id="login-pass" type="password" placeholder="Enter password">
-    </div>
-    <button class="btn btn-primary btn-full" onclick="doLogin()" style="margin-top:6px;">Sign In</button>
-    <div class="login-footer">Night Aura · April 17, 2026 · Bevan's Lounge</div>
+<div class="cover">
+  <h1>📚 Research Methods in IT</h1>
+  <div class="sub">LAC 2233 &nbsp;|&nbsp; Year 2, Semester 2 &nbsp;|&nbsp; Lecturer: Reuben Soita (MScIT)</div>
+  <div class="sub">Livingstone International University</div>
+  <div class="badge">⚡ EXAM STUDY GUIDE — All Topics Covered</div>
+</div>
+
+<div class="toc">
+  <h2>📋 Contents</h2>
+  <ol>
+    <li><a href="#t1">What is Research?</a></li>
+    <li><a href="#t2">Importance of Research in IT</a></li>
+    <li><a href="#t3">Defining Research Problems & Questions</a></li>
+    <li><a href="#t4">The Research Process (Step by Step)</a></li>
+    <li><a href="#t5">Literature Review</a></li>
+    <li><a href="#t6">Data Collection Methods</a></li>
+    <li><a href="#t7">Observation as a Data Collection Tool</a></li>
+    <li><a href="#t8">Research Proposal Writing</a></li>
+    <li><a href="#t9">Research Report Structure</a></li>
+    <li><a href="#t10">Research Methodology (Chapter 3)</a></li>
+    <li><a href="#t11">Interview Guide Design</a></li>
+    <li><a href="#t12">SMART Criteria & Quick Reference</a></li>
+  </ol>
+</div>
+
+<div class="container">
+
+<!-- TOPIC 1 -->
+<div class="topic" id="t1">
+  <div class="topic-header"><div class="num">1</div><h2>What is Research?</h2></div>
+  <div class="topic-body">
+    <p><strong>Research</strong> is a systematic, organized process of gathering, analyzing, and interpreting information to answer questions, solve problems, or gain new knowledge.</p>
+    <h3>Key Characteristics</h3>
+    <ul>
+      <li><strong>Purpose-driven</strong> — focused on a specific problem or question</li>
+      <li><strong>Systematic</strong> — follows a structured plan (plan → collect → analyze → report)</li>
+      <li><strong>Objective</strong> — based on evidence, not personal opinion</li>
+      <li><strong>Evidence-based</strong> — conclusions drawn from data</li>
+      <li><strong>Critical thinking</strong> — requires analysis and synthesis</li>
+    </ul>
+    <h3>Types of Research</h3>
+    <table>
+      <tr><th>Type</th><th>Description</th></tr>
+      <tr><td><strong>Basic/Fundamental</strong></td><td>Builds general knowledge; no immediate application</td></tr>
+      <tr><td><strong>Applied</strong></td><td>Solves real-world, practical problems</td></tr>
+      <tr><td><strong>Descriptive</strong></td><td>Describes phenomena without manipulating variables</td></tr>
+      <tr><td><strong>Exploratory</strong></td><td>Investigates new or underexplored areas</td></tr>
+      <tr><td><strong>Analytical</strong></td><td>Interprets data to find patterns or causes</td></tr>
+    </table>
   </div>
 </div>
 
-<nav class="nav" id="main-nav">
-  <div class="nav-brand">NIGHT<span>AURA</span></div>
-  <div style="display:flex;align-items:center;gap:8px;">
-    <div class="nav-tabs" id="nav-tabs">
-      <button class="nav-tab active" id="tab-dashboard" onclick="showPage('dashboard',this)">📊</button>
-      <button class="nav-tab" id="tab-tickets" onclick="showPage('tickets',this)">🎟️</button>
-      <button class="nav-tab" id="tab-scanner" onclick="showPage('scanner',this)">📷</button>
-      <button class="nav-tab" id="tab-log" onclick="showPage('log',this)">📋</button>
-      <button class="nav-tab" id="tab-print" onclick="showPage('print',this)">🖨️</button>
-      <button class="nav-tab" id="tab-verify" onclick="showPage('verify',this)">✅</button>
+<!-- TOPIC 2 -->
+<div class="topic" id="t2">
+  <div class="topic-header"><div class="num">2</div><h2>Importance of Research in IT</h2></div>
+  <div class="topic-body">
+    <p>IT research plays a vital role in development, improvement, and effective use of modern technologies.</p>
+    <div class="grid2">
+      <div class="card"><h4>1. Drives Innovation</h4><ul><li>New tech: AI, cloud, IoT, cybersecurity, data science</li></ul></div>
+      <div class="card"><h4>2. Improves Problem Solving</h4><ul><li>Evidence-based solutions to systems/network/software issues</li></ul></div>
+      <div class="card"><h4>3. Supports Decision-Making</h4><ul><li>Reliable data for tech selection and IT investment</li></ul></div>
+      <div class="card"><h4>4. Enhances System Quality</h4><ul><li>Improves performance, reliability, scalability, security</li></ul></div>
+      <div class="card"><h4>5. Strengthens Cybersecurity</h4><ul><li>Identifies threats, vulnerabilities, attack patterns</li></ul></div>
+      <div class="card"><h4>6. Improves Efficiency</h4><ul><li>Reduces costs, improves automation and productivity</li></ul></div>
+      <div class="card"><h4>7. Academic/Professional Growth</h4><ul><li>Keeps professionals current with emerging trends</li></ul></div>
+      <div class="card"><h4>8. Addresses Societal Needs</h4><ul><li>Healthcare, education, finance, government services</li></ul></div>
+      <div class="card"><h4>9. Evidence-Based Practices</h4><ul><li>Systems built on tested data, not assumptions</li></ul></div>
+      <div class="card"><h4>10. Prepares for Future Tech</h4><ul><li>Anticipates challenges, ensures digital readiness</li></ul></div>
     </div>
-    <div class="nav-user"><span id="nav-username"></span><button class="btn-logout" onclick="doLogout()">Out</button></div>
-  </div>
-</nav>
-
-<!-- DASHBOARD -->
-<div id="page-dashboard" class="page active">
-  <div class="page-header">
-    <div class="page-title">Dashboard</div>
-    <div class="page-sub">April 17, 2026 · Bevan's Lounge, Kamonkoli</div>
-  </div>
-  <div class="revenue-card">
-    <div class="rev-label">Total Revenue Collected</div>
-    <div class="rev-amount" id="total-revenue">0</div>
-    <div class="rev-currency">Uganda Shillings (UGX)</div>
-  </div>
-  <div class="stats-grid">
-    <div class="stat-card"><div class="stat-num" id="stat-total">75</div><div class="stat-label">Total Tickets</div></div>
-    <div class="stat-card"><div class="stat-num" id="stat-sold">0</div><div class="stat-label">Sold</div></div>
-    <div class="stat-card"><div class="stat-num" id="stat-scanned">0</div><div class="stat-label">Checked In</div></div>
-    <div class="stat-card"><div class="stat-num" id="stat-remaining">75</div><div class="stat-label">Remaining</div></div>
-  </div>
-  <div class="section-title">Ticket Tiers</div>
-  <div class="tier-cards" id="tier-cards"></div>
-</div>
-
-<!-- TICKETS -->
-<div id="page-tickets" class="page">
-  <div class="page-header">
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-      <div><div class="page-title">Tickets</div><div class="page-sub">All 75 tickets</div></div>
-      <button class="btn btn-primary btn-sm" onclick="openAddBuyer()">+ Assign</button>
-    </div>
-  </div>
-  <input type="text" class="search-box" placeholder="🔍  Search by ID, name or phone..." oninput="renderTicketList(this.value)">
-  <div class="ticket-filters">
-    <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
-    <button class="filter-btn" onclick="setFilter('unpaid',this)">Unpaid</button>
-    <button class="filter-btn" onclick="setFilter('paid',this)">Paid</button>
-    <button class="filter-btn" onclick="setFilter('scanned',this)">Scanned</button>
-    <button class="filter-btn" onclick="setFilter('Basic',this)">Basic</button>
-    <button class="filter-btn" onclick="setFilter('Aura Pass',this)">Aura Pass</button>
-    <button class="filter-btn" onclick="setFilter('Aura Farmer',this)">Aura Farmer</button>
-    <button class="filter-btn" onclick="setFilter('Last Minute',this)" style="border-color:rgba(251,146,60,0.4);color:#fb923c;">Last Minute</button>
-  </div>
-  <div class="ticket-list" id="ticket-list"></div>
-</div>
-
-<!-- SCANNER -->
-<div id="page-scanner" class="page">
-  <div class="page-header"><div class="page-title">Door Scanner</div><div class="page-sub">Scan tickets at the door</div></div>
-  <div class="scanner-wrap">
-    <div id="scanner-box" class="scanner-placeholder">
-      <div class="icon">📷</div>
-      <div style="font-size:14px;font-weight:600;color:var(--beige)">Camera Off</div>
-      <div style="font-size:12px;color:var(--grey)">Tap Start to scan</div>
-    </div>
-    <div id="scan-result" class="scan-result">
-      <div class="scan-icon" id="scan-icon">✅</div>
-      <div class="scan-status" id="scan-status">VALID</div>
-      <div class="scan-ticket-id" id="scan-ticket-id"></div>
-      <div class="scan-detail" id="scan-detail"></div>
-    </div>
-    <div class="manual-scan-wrap">
-      <div style="display:flex;gap:8px;margin-bottom:8px;">
-        <button class="btn btn-primary btn-full" id="scan-btn" onclick="toggleCamera()">Start Camera</button>
-      </div>
-      <div style="display:flex;gap:8px;">
-        <input type="text" class="form-input" id="manual-id" placeholder="Or type ticket ID manually..." style="flex:1;">
-        <button class="btn btn-outline" onclick="manualScan()">Check</button>
-      </div>
-    </div>
-    <div style="width:100%;max-width:320px;">
-      <div class="section-title">Recent Scans</div>
-      <div class="scan-log" id="scan-log"><div class="empty-state">No scans yet</div></div>
-    </div>
+    <div class="callout"><strong>Example:</strong> Research on cloud security led to encryption protocols that protect sensitive data, allowing businesses to confidently adopt cloud services.</div>
   </div>
 </div>
 
-<!-- LOG -->
-<div id="page-log" class="page">
-  <div class="page-header">
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-      <div><div class="page-title">Entry Log</div><div class="page-sub">All door check-ins</div></div>
-      <button class="btn btn-outline btn-sm" onclick="exportLog()">Export CSV</button>
+<!-- TOPIC 3 -->
+<div class="topic" id="t3">
+  <div class="topic-header"><div class="num">3</div><h2>Defining Research Problems & Questions</h2></div>
+  <div class="topic-body">
+    <h3>The Research Problem</h3>
+    <p>A broad issue the researcher aims to explore or solve. It forms the foundation of the entire study.</p>
+    <h3>Steps to Define the Research Problem</h3>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div>Choose a broad area of interest you want to explore</div></div>
+      <div class="step"><div class="step-num">2</div><div>Conduct a literature review to find gaps</div></div>
+      <div class="step"><div class="step-num">3</div><div>Narrow down to a specific, focused problem</div></div>
+      <div class="step"><div class="step-num">4</div><div>Check feasibility — can it be done in the time/resources available?</div></div>
     </div>
-  </div>
-  <div id="entry-log-list"></div>
-</div>
+    <p><strong>A well-defined problem is:</strong> Clearly stated · Specific · Feasible · Relevant · Addresses a knowledge gap</p>
 
-<!-- PRINT -->
-<div id="page-print" class="page">
-  <div class="page-header no-print">
-    <div class="page-title">Print QR Codes</div>
-    <div class="page-sub">All tickets with unique QR codes — 4 per row when printed</div>
-  </div>
-  <div class="print-controls no-print">
-    <select class="form-select" id="print-filter" onchange="renderPrintPage()" style="width:auto;font-size:12px;padding:6px 10px;">
-      <option value="all">All Tickets (75)</option>
-      <option value="Basic">Basic Only</option>
-      <option value="Aura Pass">Aura Pass Only</option>
-      <option value="Aura Farmer">Aura Farmer Only</option>
-      <option value="paid">Paid Only</option>
-    </select>
-    <button class="btn btn-aqua" onclick="doPrint()">🖨️ Print Now</button>
-  </div>
-  <div class="qr-grid" id="qr-print-grid"></div>
-</div>
-
-<!-- VERIFY PAYMENTS -->
-<div id="page-verify" class="page">
-  <div class="page-header">
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;">
-      <div><div class="page-title">Verify Payments</div><div class="page-sub">Approve or reject pending RSVPs</div></div>
-      <button class="btn btn-aqua btn-sm" onclick="loadPendingRSVPs()">🔄 Refresh</button>
-    </div>
-  </div>
-  <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:16px;">
-    <div class="stat-card"><div class="stat-num" id="v-stat-pending" style="color:var(--gold)">0</div><div class="stat-label">Pending</div></div>
-    <div class="stat-card"><div class="stat-num" id="v-stat-approved" style="color:var(--accent)">0</div><div class="stat-label">Approved</div></div>
-    <div class="stat-card"><div class="stat-num" id="v-stat-rejected" style="color:var(--red)">0</div><div class="stat-label">Rejected</div></div>
-  </div>
-  <input type="text" class="search-box" placeholder="🔍  Search by name, phone or transaction ID..." oninput="filterRSVPs(this.value)">
-  <div id="rsvp-list"><div class="empty-state">Click Refresh to load pending RSVPs</div></div>
-</div>
-
-<!-- VERIFY MODAL -->
-<div class="modal-overlay" id="modal-verify">
-  <div class="modal" style="max-width:420px;">
-    <button class="modal-close" onclick="closeModal('modal-verify')">✕</button>
-    <div class="modal-title">Verify RSVP</div>
-    <div id="modal-verify-content"></div>
+    <h3>Research Questions</h3>
+    <p>More specific than the problem — break it into manageable parts. Guide data collection and analysis.</p>
+    <h3>Types of Research Questions</h3>
+    <table>
+      <tr><th>Type</th><th>Example</th></tr>
+      <tr><td><strong>Descriptive</strong></td><td>"What are the challenges faced by small businesses in urban areas?"</td></tr>
+      <tr><td><strong>Comparative</strong></td><td>"How does customer satisfaction differ between online and in-store shopping?"</td></tr>
+      <tr><td><strong>Causal</strong></td><td>"What impact does social media have on teenage self-esteem?"</td></tr>
+    </table>
+    <p><strong>A well-defined question is:</strong> Clear · Focused · Feasible · Significant · Answerable through empirical data</p>
   </div>
 </div>
 
-<!-- DETAIL MODAL -->
-<div class="modal-overlay" id="modal-detail">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal('modal-detail')">✕</button>
-    <div class="modal-title">Ticket Details</div>
-    <div id="modal-detail-content"></div>
+<!-- TOPIC 4 -->
+<div class="topic" id="t4">
+  <div class="topic-header"><div class="num">4</div><h2>The Research Process (Step by Step)</h2></div>
+  <div class="topic-body">
+    <table>
+      <tr><th>Step</th><th>What You Do</th><th>Example</th></tr>
+      <tr><td><strong>1. Identify Problem</strong></td><td>Select a relevant, specific issue</td><td>"How can blockchain improve data integrity in cloud storage?"</td></tr>
+      <tr><td><strong>2. Literature Review</strong></td><td>Review existing studies; identify gaps</td><td>Review encryption methods for cloud computing</td></tr>
+      <tr><td><strong>3. Research Questions/Hypotheses</strong></td><td>Define what the study will answer</td><td>"Does blockchain reduce data tampering in cloud storage?"</td></tr>
+      <tr><td><strong>4. Design Methodology</strong></td><td>Choose approach, data collection method</td><td>Compare blockchain vs. non-blockchain systems</td></tr>
+      <tr><td><strong>5. Collect & Analyze Data</strong></td><td>Gather data; analyze appropriately</td><td>Measure tampering incidents in both systems</td></tr>
+      <tr><td><strong>6. Present Findings</strong></td><td>Interpret results, make recommendations</td><td>Conclude blockchain reduces tampering; recommend adoption</td></tr>
+    </table>
   </div>
 </div>
 
-<!-- ASSIGN MODAL -->
-<div class="modal-overlay" id="modal-assign">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal('modal-assign')">✕</button>
-    <div class="modal-title">Assign Ticket</div>
-    <div class="form-group"><label class="form-label">Ticket ID</label><select class="form-select" id="assign-ticket-id"></select></div>
-    <div class="form-group"><label class="form-label">Buyer Name</label><input class="form-input" id="assign-name" placeholder="Full name"></div>
-    <div class="form-group"><label class="form-label">Phone</label><input class="form-input" id="assign-phone" placeholder="07XX XXX XXX"></div>
-    <div class="form-group"><label class="form-label">Payment</label>
-      <select class="form-select" id="assign-payment"><option value="paid">✅ Paid</option><option value="unpaid">⏳ Unpaid</option></select>
+<!-- TOPIC 5 -->
+<div class="topic" id="t5">
+  <div class="topic-header"><div class="num">5</div><h2>Literature Review</h2></div>
+  <div class="topic-body">
+    <p>A critical component that establishes the foundation for research by reviewing existing knowledge, theories, and technologies related to the topic.</p>
+    <h3>Why Do a Literature Review?</h3>
+    <ul>
+      <li><strong>Identify research gaps</strong> — find what has not been explored</li>
+      <li><strong>Build on existing knowledge</strong> — place new research in context</li>
+      <li><strong>Clarify theories and concepts</strong> — define key terms and frameworks</li>
+      <li><strong>Establish methodologies</strong> — learn commonly used approaches</li>
+      <li><strong>Provide rationale</strong> — justify why your study is needed</li>
+    </ul>
+    <h3>Structure of a Literature Review</h3>
+    <div class="steps">
+      <div class="step"><div class="step-num">a</div><div><strong>Introduction</strong> — purpose, scope, research questions</div></div>
+      <div class="step"><div class="step-num">b</div><div><strong>Thematic or Chronological Organization</strong> — group by topic OR timeline</div></div>
+      <div class="step"><div class="step-num">c</div><div><strong>Summary & Synthesis</strong> — key findings, critical analysis, comparisons</div></div>
+      <div class="step"><div class="step-num">d</div><div><strong>Identify Gaps</strong> — unresolved issues, limitations, emerging trends</div></div>
+      <div class="step"><div class="step-num">e</div><div><strong>Conclusion</strong> — summary of findings, gaps, implications for future research</div></div>
     </div>
-    <button class="btn btn-primary btn-full" onclick="assignTicket()">Save Ticket</button>
+    <h3>Sources to Use</h3>
+    <span class="tag">Academic Journals</span>
+    <span class="tag">Conference Proceedings</span>
+    <span class="tag">Books & Book Chapters</span>
+    <span class="tag">Technical Reports</span>
+    <span class="tag">Theses & Dissertations</span>
+    <span class="tag q">Online Resources (use cautiously)</span>
   </div>
 </div>
 
-<div class="toast" id="toast"></div>
-
-<script>
-function generateTickets(){
-  const t=[];
-  for(let i=1;i<=30;i++) t.push({id:`SB-NA-BSC-EB-${String(i).padStart(4,'0')}`,tier:'Basic',type:'Early Bird',price:20000,buyer:'',phone:'',paid:false,scanned:false,scanTime:null});
-  for(let i=1;i<=20;i++) t.push({id:`SB-NA-BSC-RG-${String(i).padStart(4,'0')}`,tier:'Basic',type:'Regular',price:25000,buyer:'',phone:'',paid:false,scanned:false,scanTime:null});
-  for(let i=1;i<=20;i++) t.push({id:`SB-NA-APC-${String(i).padStart(4,'0')}`,tier:'Aura Pass',type:'VIP',price:35000,buyer:'',phone:'',paid:false,scanned:false,scanTime:null});
-  for(let i=1;i<=5;i++) t.push({id:`SB-NA-AFC-${String(i).padStart(4,'0')}`,tier:'Aura Farmer',type:'VVIP',price:50000,buyer:'',phone:'',paid:false,scanned:false,scanTime:null});
-  for(let i=1;i<=20;i++) t.push({id:`SB-NA-LMB-${String(i).padStart(4,'0')}`,tier:'Last Minute',type:'Gate',price:25000,buyer:'',phone:'',paid:false,scanned:false,scanTime:null});
-  return t;
-}
-
-// ── GOOGLE SHEETS SYNC ──
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby-GWIueVdm_wBJaKmeatAaN2ksFzRVJnHbZLAFYMXge4NBwkBtLkSGsJ4hX4VBsLa8/exec';
-let syncEnabled = true;
-
-// Use fetch with redirect follow — works with Apps Script
-function sheetFetch(params) {
-  return fetch(`${SCRIPT_URL}?${params}`, {
-    method: 'GET',
-    redirect: 'follow',
-    mode: 'cors',
-  })
-  .then(r => r.json())
-  .catch(() => null);
-}
-
-async function sheetCheck(id){
-  try{ return await sheetFetch(`action=check&id=${encodeURIComponent(id)}`); }
-  catch(e){ return null; }
-}
-
-async function sheetScan(id, time){
-  try{ return await sheetFetch(`action=scan&id=${encodeURIComponent(id)}&time=${encodeURIComponent(time)}`); }
-  catch(e){ return null; }
-}
-
-async function sheetStats(){
-  try{ return await sheetFetch('action=stats'); }
-  catch(e){ return null; }
-}
-
-async function sheetGetRSVPs(){
-  try{ return await sheetFetch('action=getRSVPs'); }
-  catch(e){ return null; }
-}
-
-async function sheetVerifyRSVP(bookingId, assignedId, status, notes){
-  try{
-    return await sheetFetch(`action=verifyRSVP&bookingId=${encodeURIComponent(bookingId)}&assignedId=${encodeURIComponent(assignedId)}&status=${encodeURIComponent(status)}&notes=${encodeURIComponent(notes)}`);
-  } catch(e){ return null; }
-}
-
-let tickets=JSON.parse(localStorage.getItem('na_tickets')||'null')||generateTickets();
-let scanLog=JSON.parse(localStorage.getItem('na_scanlog')||'[]');
-let activeFilter='all', cameraActive=false, videoStream=null, scanInterval=null;
-
-function save(){localStorage.setItem('na_tickets',JSON.stringify(tickets));localStorage.setItem('na_scanlog',JSON.stringify(scanLog));}
-
-function showPage(id,el){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
-  const pg=document.getElementById('page-'+id);
-  if(pg) pg.classList.add('active');
-  if(el&&el.classList) el.classList.add('active');
-  if(id==='dashboard') renderDashboard();
-  if(id==='tickets') renderTicketList();
-  if(id==='log') renderEntryLog();
-  if(id==='print') renderPrintPage();
-  if(id==='verify') loadPendingRSVPs();
-  if(id!=='scanner') stopCamera();
-}
-
-function showPageDirect(id){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  const pg=document.getElementById('page-'+id); if(pg) pg.classList.add('active');
-  document.querySelectorAll('.nav-tab').forEach((t,i)=>{
-    ['dashboard','tickets','scanner','log','print','verify'][i]===id?t.classList.add('active'):t.classList.remove('active');
-  });
-  if(id==='tickets') renderTicketList();
-  if(id==='print') renderPrintPage();
-  if(id==='verify') loadPendingRSVPs();
-}
-
-function renderDashboard(){
-  const sold=tickets.filter(t=>t.paid).length;
-  const scanned=tickets.filter(t=>t.scanned).length;
-  const revenue=tickets.filter(t=>t.paid).reduce((s,t)=>s+t.price,0);
-  document.getElementById('stat-total').textContent=tickets.length;
-  document.getElementById('stat-sold').textContent=sold;
-  document.getElementById('stat-scanned').textContent=scanned;
-  document.getElementById('stat-remaining').textContent=tickets.length-sold;
-  document.getElementById('total-revenue').textContent=revenue.toLocaleString();
-  const tierData=[
-    {label:'Basic Early Bird',filter:t=>t.type==='Early Bird',color:'#c8f03c'},
-    {label:'Basic Regular',filter:t=>t.type==='Regular'&&t.tier==='Basic',color:'#a8cc20'},
-    {label:'Aura Pass',filter:t=>t.tier==='Aura Pass',color:'#2dd4c8'},
-    {label:'Aura Farmer',filter:t=>t.tier==='Aura Farmer',color:'#f5f0e8'},
-    {label:'Last Minute',filter:t=>t.tier==='Last Minute',color:'#fb923c'},
-  ];
-  document.getElementById('tier-cards').innerHTML=tierData.map(td=>{
-    const all=tickets.filter(td.filter),sold=all.filter(t=>t.paid).length,sc=all.filter(t=>t.scanned).length;
-    return `<div class="tier-card" onclick="setFilter('${td.label.split(' ')[0]}',null);showPageDirect('tickets')">
-      <div class="tier-info"><div class="tier-dot" style="background:${td.color};box-shadow:0 0 8px ${td.color}66"></div>
-      <div><div class="tier-name" style="color:${td.color}">${td.label}</div><div class="tier-count">${sc} in · ${all.length-sold} unsold</div></div></div>
-      <div class="tier-stats"><div class="tier-sold" style="color:${td.color}">${sold}</div><div class="tier-total">of ${all.length}</div></div>
-    </div>`;
-  }).join('');
-  // Pull live scanned count from Google Sheets
-  sheetStats().then(s=>{
-    if(s&&s.scanned!==undefined){
-      const el=document.getElementById('stat-scanned');
-      if(el) el.textContent=s.scanned;
-    }
-  });
-}
-
-function setFilter(f,el){
-  activeFilter=f;
-  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-  if(el) el.classList.add('active');
-  renderTicketList();
-}
-
-function renderTicketList(search=''){
-  const q=search.toLowerCase();
-  let filtered=tickets.filter(t=>{
-    const ms=!q||t.id.toLowerCase().includes(q)||t.buyer.toLowerCase().includes(q)||t.phone.includes(q);
-    if(!ms) return false;
-    if(activeFilter==='all') return true;
-    if(activeFilter==='paid') return t.paid;
-    if(activeFilter==='unpaid') return !t.paid;
-    if(activeFilter==='scanned') return t.scanned;
-    return t.tier===activeFilter||t.type===activeFilter;
-  });
-  const el=document.getElementById('ticket-list'); if(!el) return;
-  if(!filtered.length){el.innerHTML='<div class="empty-state">No tickets found</div>';return;}
-  el.innerHTML=filtered.map(t=>{
-    const tc=t.tier==='Basic'?'basic':t.tier==='Aura Pass'?'aurapass':t.tier==='Last Minute'?'lastminute':'aurafarmer';
-    return `<div class="ticket-item">
-      <div>
-        <div class="ticket-id">${t.id}</div>
-        <div class="ticket-meta">${t.buyer||'<em style="color:var(--grey)">Unassigned</em>'} ${t.phone?'· '+t.phone:''}</div>
-        <div style="display:flex;gap:3px;margin-top:4px;flex-wrap:wrap;">
-          <span class="badge badge-${tc}">${t.tier}</span>
-          ${t.paid?'<span class="badge badge-paid">Paid</span>':'<span class="badge badge-unpaid">Unpaid</span>'}
-          ${t.scanned?'<span class="badge badge-scanned">Used</span>':'<span class="badge badge-unused">Unused</span>'}
-        </div>
-      </div>
-      <div class="ticket-actions"><button class="btn btn-outline btn-sm" onclick="openTicketDetail('${t.id}')">View</button></div>
-    </div>`;
-  }).join('');
-}
-
-function openTicketDetail(id){
-  const t=tickets.find(x=>x.id===id); if(!t) return;
-  const qrId='qr-m-'+Date.now();
-  const tc=t.tier==='Basic'?'basic':t.tier==='Aura Pass'?'aurapass':t.tier==='Last Minute'?'lastminute':'aurafarmer';
-  document.getElementById('modal-detail-content').innerHTML=`
-    <div class="ticket-detail-row"><span class="tdl">Ticket ID</span><span class="tdr" style="font-family:'Bebas Neue';letter-spacing:1px;color:var(--accent)">${t.id}</span></div>
-    <div class="ticket-detail-row"><span class="tdl">Tier</span><span class="tdr"><span class="badge badge-${tc}">${t.tier} — ${t.type}</span></span></div>
-    <div class="ticket-detail-row"><span class="tdl">Price</span><span class="tdr">UGX ${t.price.toLocaleString()}</span></div>
-    <div class="ticket-detail-row"><span class="tdl">Buyer</span><span class="tdr">${t.buyer||'—'}</span></div>
-    <div class="ticket-detail-row"><span class="tdl">Phone</span><span class="tdr">${t.phone||'—'}</span></div>
-    <div class="ticket-detail-row"><span class="tdl">Payment</span><span class="tdr">${t.paid?'<span class="badge badge-paid">✅ Paid</span>':'<span class="badge badge-unpaid">⏳ Unpaid</span>'}</span></div>
-    <div class="ticket-detail-row"><span class="tdl">Scan Status</span><span class="tdr">${t.scanned?`<span class="badge badge-scanned">Used · ${t.scanTime}</span>`:'<span class="badge badge-unused">Not Used</span>'}</span></div>
-    <div class="qr-display"><div id="${qrId}"></div></div>
-    <div style="display:flex;gap:7px;margin-top:8px;flex-wrap:wrap;">
-      ${!t.paid?`<button class="btn btn-success btn-sm" style="flex:1" onclick="markPaid('${t.id}')">Mark Paid</button>`:''}
-      ${t.scanned?`<button class="btn btn-danger btn-sm" style="flex:1" onclick="unmarkScanned('${t.id}')">Reset Scan</button>`:''}
-      <button class="btn btn-outline btn-sm" style="flex:1" onclick="openEditBuyer('${t.id}')">Edit</button>
-    </div>`;
-  openModal('modal-detail');
-  setTimeout(()=>{
-    const el=document.getElementById(qrId); if(!el) return;
-    try{new QRCode(el,{text:t.id,width:150,height:150,colorDark:'#000',colorLight:'#fff',correctLevel:QRCode.CorrectLevel.H});}catch(e){}
-  },150);
-}
-
-function markPaid(id){const t=tickets.find(x=>x.id===id);if(t){t.paid=true;save();renderTicketList();openTicketDetail(id);showToast('Marked as paid ✅','success');renderDashboard();}}
-function unmarkScanned(id){const t=tickets.find(x=>x.id===id);if(t){t.scanned=false;t.scanTime=null;save();renderTicketList();openTicketDetail(id);showToast('Scan reset','success');renderDashboard();}}
-
-function openAddBuyer(){
-  const unassigned=tickets.filter(t=>!t.buyer||!t.paid);
-  const sel=document.getElementById('assign-ticket-id'); if(!sel) return;
-  sel.innerHTML=unassigned.map(t=>`<option value="${t.id}">${t.id} — ${t.tier} (${t.paid?'Paid':'Unpaid'})</option>`).join('');
-  document.getElementById('assign-name').value='';
-  document.getElementById('assign-phone').value='';
-  document.getElementById('assign-payment').value='paid';
-  openModal('modal-assign');
-}
-function openEditBuyer(id){
-  const t=tickets.find(x=>x.id===id); if(!t) return;
-  closeModal('modal-detail');
-  const sel=document.getElementById('assign-ticket-id'); if(!sel) return;
-  sel.innerHTML=`<option value="${t.id}">${t.id}</option>`;
-  document.getElementById('assign-name').value=t.buyer;
-  document.getElementById('assign-phone').value=t.phone;
-  document.getElementById('assign-payment').value=t.paid?'paid':'unpaid';
-  openModal('modal-assign');
-}
-function assignTicket(){
-  const id=document.getElementById('assign-ticket-id').value;
-  const name=document.getElementById('assign-name').value.trim();
-  const phone=document.getElementById('assign-phone').value.trim();
-  const paid=document.getElementById('assign-payment').value==='paid';
-  if(!name){showToast('Enter buyer name','error');return;}
-  const t=tickets.find(x=>x.id===id);
-  if(t){t.buyer=name;t.phone=phone;t.paid=paid;save();renderTicketList();renderDashboard();closeModal('modal-assign');showToast('Ticket assigned! 🎟️','success');}
-}
-
-function toggleCamera(){if(cameraActive) stopCamera(); else startCamera();}
-async function startCamera(){
-  try{
-    const box=document.getElementById('scanner-box'); if(!box) return;
-    box.className='scanner-box';
-    box.innerHTML=`<video id="scanner-video" autoplay playsinline muted style="width:100%;height:100%;object-fit:cover;"></video><canvas id="scanner-canvas" style="display:none"></canvas><div class="scanner-corners"></div><div class="scan-line"></div>`;
-    videoStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});
-    const video=document.getElementById('scanner-video'); if(!video){stopCamera();return;}
-    video.srcObject=videoStream; cameraActive=true;
-    const btn=document.getElementById('scan-btn'); if(btn) btn.textContent='Stop Camera';
-    video.addEventListener('loadedmetadata',()=>{scanInterval=setInterval(()=>scanFrame(video),300);});
-  }catch(e){showToast('Camera denied. Use manual entry.','error');}
-}
-function stopCamera(){
-  if(videoStream){videoStream.getTracks().forEach(t=>t.stop());videoStream=null;}
-  if(scanInterval){clearInterval(scanInterval);scanInterval=null;}
-  cameraActive=false;
-  const btn=document.getElementById('scan-btn'); if(btn) btn.textContent='Start Camera';
-  const box=document.getElementById('scanner-box');
-  if(box){box.className='scanner-placeholder';box.innerHTML=`<div class="icon">📷</div><div style="font-size:14px;font-weight:600;color:var(--beige)">Camera Off</div><div style="font-size:12px;color:var(--grey)">Tap Start to scan</div>`;}
-}
-function scanFrame(video){
-  if(!video||!video.videoWidth) return;
-  const canvas=document.getElementById('scanner-canvas'); if(!canvas) return;
-  canvas.width=video.videoWidth; canvas.height=video.videoHeight;
-  const ctx=canvas.getContext('2d'); ctx.drawImage(video,0,0);
-  const imageData=ctx.getImageData(0,0,canvas.width,canvas.height);
-  const code=jsQR(imageData.data,imageData.width,imageData.height);
-  if(code) processScan(code.data);
-}
-async function processScan(rawId){
-  const id=rawId.trim().toUpperCase();
-  const lastScan=scanLog[0];
-  if(lastScan&&lastScan.id===id&&(Date.now()-lastScan.ts)<3000) return;
-
-  const result=document.getElementById('scan-result');
-  const icon=document.getElementById('scan-icon');
-  const status=document.getElementById('scan-status');
-  const tidEl=document.getElementById('scan-ticket-id');
-  const detail=document.getElementById('scan-detail');
-  if(!result||!icon||!status||!tidEl||!detail) return;
-
-  // Show loading state
-  result.className='scan-result valid';
-  icon.textContent='⏳'; status.textContent='CHECKING...';
-  tidEl.textContent=id; detail.textContent='Verifying with server...';
-
-  const scanTime = new Date().toLocaleTimeString();
-
-  // Check Google Sheets first (real-time source of truth)
-  const sheetData = await sheetCheck(id);
-
-  result.className='scan-result';
-
-  if(!sheetData || !sheetData.found){
-    // Not in sheet — check local as fallback
-    const local = tickets.find(x=>x.id===id);
-    if(!local){
-      result.classList.add('invalid');
-      icon.textContent='❌'; status.textContent='INVALID TICKET';
-      tidEl.textContent=id; detail.textContent='Not found in system.';
-      logScan(id,'invalid',null);
-    } else if(!local.paid){
-      result.classList.add('invalid');
-      icon.textContent='💳'; status.textContent='NOT PAID';
-      tidEl.textContent=id; detail.textContent=`${local.tier} — Payment not confirmed.`;
-      logScan(id,'unpaid',local);
-    } else {
-      // Local says valid, sheet unreachable — allow with warning
-      local.scanned=true; local.scanTime=scanTime; save();
-      result.classList.add('valid');
-      icon.textContent='✅'; status.textContent='VALID — WELCOME!';
-      tidEl.textContent=id; detail.textContent=`${local.tier} · ${local.type} · ${local.buyer||'Guest'} (offline)`;
-      logScan(id,'valid',local);
-    }
-  } else if(!sheetData.paid){
-    result.classList.add('invalid');
-    icon.textContent='💳'; status.textContent='NOT PAID';
-    tidEl.textContent=id; detail.textContent=`${sheetData.tier} — Payment not confirmed.`;
-    logScan(id,'unpaid',sheetData);
-  } else if(sheetData.scanned){
-    result.classList.add('invalid');
-    icon.textContent='🚫'; status.textContent='ALREADY USED';
-    tidEl.textContent=id; detail.textContent=`First used at ${sheetData.scanTime}. Deny entry.`;
-    logScan(id,'duplicate',sheetData);
-  } else {
-    // Valid! Mark in sheet AND locally
-    await sheetScan(id, scanTime);
-    const local=tickets.find(x=>x.id===id);
-    if(local){local.scanned=true; local.scanTime=scanTime; save();}
-    result.classList.add('valid');
-    icon.textContent='✅'; status.textContent='VALID — WELCOME!';
-    tidEl.textContent=id; detail.textContent=`${sheetData.tier} · ${sheetData.type} · ${sheetData.buyer||'Guest'}`;
-    logScan(id,'valid',sheetData);
-    renderDashboard();
-  }
-
-  setTimeout(()=>{const r=document.getElementById('scan-result');if(r) r.className='scan-result';},4000);
-}
-function manualScan(){
-  const inp=document.getElementById('manual-id'); if(!inp) return;
-  const id=inp.value.trim().toUpperCase(); if(!id) return;
-  processScan(id); inp.value='';
-}
-const mi=document.getElementById('manual-id');
-if(mi) mi.addEventListener('keydown',e=>{if(e.key==='Enter') manualScan();});
-
-function logScan(id,result,ticket){
-  scanLog.unshift({id,result,tier:ticket?.tier||'—',buyer:ticket?.buyer||'—',ts:Date.now(),time:new Date().toLocaleTimeString()});
-  if(scanLog.length>200) scanLog.pop(); save(); renderScanLog();
-}
-function renderScanLog(){
-  const el=document.getElementById('scan-log'); if(!el) return;
-  if(!scanLog.length){el.innerHTML='<div class="empty-state">No scans yet</div>';return;}
-  const colors={valid:'var(--accent)',duplicate:'var(--red)',invalid:'var(--red)',unpaid:'var(--gold)'};
-  el.innerHTML=scanLog.slice(0,10).map(s=>`
-    <div class="scan-log-item">
-      <div><div class="sli-id" style="color:${colors[s.result]||'var(--grey)'}">${s.id}</div><div style="font-size:10px;color:var(--grey)">${s.tier} · ${s.buyer}</div></div>
-      <div style="text-align:right"><div style="font-size:10px;font-weight:700;color:${colors[s.result]||'var(--grey)'}">${s.result.toUpperCase()}</div><div class="sli-time">${s.time}</div></div>
-    </div>`).join('');
-}
-
-function renderEntryLog(){
-  const el=document.getElementById('entry-log-list'); if(!el) return;
-  const valid=scanLog.filter(s=>s.result==='valid');
-  if(!valid.length){el.innerHTML='<div class="empty-state">No check-ins yet</div>';return;}
-  el.innerHTML=`<div style="font-size:13px;color:var(--grey);margin-bottom:10px;">${valid.length} guests checked in</div>`+
-    valid.map(s=>`<div class="ticket-item"><div><div class="ticket-id">${s.id}</div><div class="ticket-meta">${s.buyer} · ${s.tier}</div></div><div style="font-size:11px;color:var(--accent);font-weight:700;">${s.time}</div></div>`).join('');
-}
-function exportLog(){
-  const valid=scanLog.filter(s=>s.result==='valid');
-  const csv='Ticket ID,Tier,Buyer,Time\n'+valid.map(s=>`${s.id},${s.tier},${s.buyer},${s.time}`).join('\n');
-  const blob=new Blob([csv],{type:'text/csv'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='NightAura_Checkins.csv';a.click();
-  showToast('Log exported!','success');
-}
-
-// ══ PRINT QR ══
-function renderPrintPage(){
-  const grid=document.getElementById('qr-print-grid'); if(!grid) return;
-  const filterVal=(document.getElementById('print-filter')||{}).value||'all';
-  let filtered=tickets;
-  if(filterVal==='paid') filtered=tickets.filter(t=>t.paid);
-  else if(filterVal!=='all') filtered=tickets.filter(t=>t.tier===filterVal);
-
-  grid.innerHTML=filtered.map(t=>{
-    const safeId=t.id.replace(/[^a-zA-Z0-9]/g,'-');
-    return `<div class="qr-card">
-      <div class="qr-card-qr" id="qrp-${safeId}"></div>
-      <div class="qr-card-id">${t.id}</div>
-      <div class="qr-card-tier">${t.tier} · ${t.type}</div>
-      <div class="qr-card-event">Night Aura · Apr 17 2026</div>
-    </div>`;
-  }).join('');
-
-  // Generate QR codes with slight delay to ensure DOM is ready
-  setTimeout(()=>{
-    filtered.forEach(t=>{
-      const safeId=t.id.replace(/[^a-zA-Z0-9]/g,'-');
-      const el=document.getElementById('qrp-'+safeId); if(!el) return;
-      el.innerHTML='';
-      try{new QRCode(el,{text:t.id,width:90,height:90,colorDark:'#000000',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.H});}catch(e){}
-    });
-  },300);
-}
-
-function doPrint(){
-  const grid=document.getElementById('qr-print-grid');
-  if(!grid||!grid.children.length){showToast('No QR codes to print','error');return;}
-
-  setTimeout(()=>window.print(),400);
-}
-
-function openModal(id){const m=document.getElementById(id);if(m) m.classList.add('open');}
-function closeModal(id){const m=document.getElementById(id);if(m) m.classList.remove('open');}
-document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',e=>{if(e.target===m) m.classList.remove('open');}));
-
-function showToast(msg,type='success'){
-  const t=document.getElementById('toast'); if(!t) return;
-  t.textContent=msg; t.className='toast '+type;
-  requestAnimationFrame(()=>t.classList.add('show'));
-  setTimeout(()=>t.classList.remove('show'),2800);
-}
-
-// ══ AUTH ══
-const ACCOUNTS = {
-  'Sugar BaBy': { password:'onhearts', role:'admin' },
-  'Aura':       { password:'dreambig',  role:'scanner' }
-};
-
-let currentUser = null;
-let currentRole = null;
-
-function doLogin(){
-  const user = document.getElementById('login-user').value.trim();
-  const pass = document.getElementById('login-pass').value;
-  const err  = document.getElementById('login-error');
-  const acc  = ACCOUNTS[user];
-  if(!acc || acc.password !== pass){
-    err.classList.add('show');
-    document.getElementById('login-pass').value='';
-    setTimeout(()=>err.classList.remove('show'), 3000);
-    return;
-  }
-  currentUser = user;
-  currentRole = acc.role;
-  document.getElementById('login-screen').classList.add('hidden');
-  document.getElementById('nav-username').textContent = user;
-  applyRoleAccess();
-  if(currentRole==='scanner'){
-    showPage('scanner', document.getElementById('tab-scanner'));
-  } else {
-    renderDashboard();
-    renderScanLog();
-  }
-}
-
-function doLogout(){
-  currentUser=null; currentRole=null;
-  document.getElementById('login-screen').classList.remove('hidden');
-  document.getElementById('login-user').value='';
-  document.getElementById('login-pass').value='';
-  stopCamera();
-}
-
-function applyRoleAccess(){
-  if(currentRole==='scanner'){
-    ['tab-dashboard','tab-tickets','tab-log','tab-print','tab-verify'].forEach(id=>{
-      const el=document.getElementById(id); if(el) el.style.display='none';
-    });
-  } else {
-    ['tab-dashboard','tab-tickets','tab-log','tab-print','tab-scanner','tab-verify'].forEach(id=>{
-      const el=document.getElementById(id); if(el) el.style.display='';
-    });
-  }
-}
-
-// Enter key on login
-document.getElementById('login-pass').addEventListener('keydown',e=>{ if(e.key==='Enter') doLogin(); });
-document.getElementById('login-user').addEventListener('keydown',e=>{ if(e.key==='Enter') document.getElementById('login-pass').focus(); });
-
-// ══ VERIFY PAYMENTS ══
-let allRSVPs=[],filteredRSVPs=[];
-
-async function loadPendingRSVPs(){
-  const el=document.getElementById('rsvp-list'); if(!el) return;
-  el.innerHTML='<div class="empty-state">⏳ Loading from Google Sheets...</div>';
-  try{
-    const data=await sheetGetRSVPs();
-    if(!data||data.error){el.innerHTML=`<div class="empty-state">Error loading RSVPs. Try refreshing.</div>`;return;}
-    allRSVPs=data.rsvps||[]; filteredRSVPs=[...allRSVPs];
-    updateVerifyStats(); renderRSVPList(filteredRSVPs);
-  }catch(e){el.innerHTML='<div class="empty-state">Could not connect. Check your internet connection.</div>';}
-}
-
-function filterRSVPs(q){
-  const query=q.toLowerCase();
-  filteredRSVPs=!query?[...allRSVPs]:allRSVPs.filter(r=>(r.name||'').toLowerCase().includes(query)||(r.phone||'').includes(query)||(r.txn||'').toLowerCase().includes(query)||(r.id||'').toLowerCase().includes(query));
-  renderRSVPList(filteredRSVPs);
-}
-
-function updateVerifyStats(){
-  const p=allRSVPs.filter(r=>r.status==='pending').length;
-  const a=allRSVPs.filter(r=>r.status==='approved').length;
-  const rj=allRSVPs.filter(r=>r.status==='rejected').length;
-  const pe=document.getElementById('v-stat-pending'); if(pe) pe.textContent=p;
-  const ae=document.getElementById('v-stat-approved'); if(ae) ae.textContent=a;
-  const re=document.getElementById('v-stat-rejected'); if(re) re.textContent=rj;
-}
-
-function renderRSVPList(rsvps){
-  const el=document.getElementById('rsvp-list'); if(!el) return;
-  if(!rsvps.length){el.innerHTML='<div class="empty-state">No RSVPs found</div>';return;}
-  el.innerHTML=rsvps.map((r,i)=>{
-    const sc=r.status==='approved'?'approved':r.status==='rejected'?'rejected':'pending';
-    const sl=r.status==='approved'?'✅ Approved':r.status==='rejected'?'❌ Rejected':'⏳ Pending';
-    return `<div class="rsvp-card ${sc}">
-      <div class="rsvp-header"><div class="rsvp-name">${r.name||'Unknown'}</div><span class="rsvp-status ${sc}">${sl}</span></div>
-      <div class="rsvp-row"><span class="rsvp-row-label">Phone</span><span class="rsvp-row-val">${r.phone||'—'}</span></div>
-      <div class="rsvp-row"><span class="rsvp-row-label">Ticket</span><span class="rsvp-row-val">${r.tier||'—'} — ${r.type||'—'}</span></div>
-      <div class="rsvp-row"><span class="rsvp-row-label">Amount</span><span class="rsvp-row-val" style="color:var(--gold)">UGX ${Number(r.price||0).toLocaleString()}</span></div>
-      <div class="rsvp-row"><span class="rsvp-row-label">Network</span><span class="rsvp-row-val">${r.momo||'—'} · ${r.momoNumber||'—'}</span></div>
-      <div class="rsvp-row"><span class="rsvp-row-label">Transaction ID</span><span class="rsvp-row-val txn">${r.txn||'—'}</span></div>
-      <div class="rsvp-row"><span class="rsvp-row-label">Booking ID</span><span class="rsvp-row-val" style="color:var(--aqua);font-size:11px;">${r.id||'—'}</span></div>
-      <div class="rsvp-row"><span class="rsvp-row-label">Submitted</span><span class="rsvp-row-val">${r.time||'—'}</span></div>
-      ${r.notes?`<div class="rsvp-row"><span class="rsvp-row-label">Notes</span><span class="rsvp-row-val">${r.notes}</span></div>`:''}
-      ${sc==='pending'?`<div class="rsvp-actions">
-        <button class="btn btn-success" onclick="openVerifyModal(${i})">🔍 Review</button>
-        <button class="btn btn-danger" onclick="rejectRSVP(${i})">❌ Reject</button>
-      </div>`:''}
-    </div>`;
-  }).join('');
-}
-
-function openVerifyModal(idx){
-  const r=filteredRSVPs[idx]; if(!r) return;
-  const unassigned=tickets.filter(t=>!t.paid&&!t.buyer&&t.tier===r.tier);
-  const opts=unassigned.map(t=>`<option value="${t.id}">${t.id}</option>`).join('');
-  document.getElementById('modal-verify-content').innerHTML=`
-    <div style="margin-bottom:14px;">
-      <div style="font-size:16px;font-weight:700;color:var(--white);margin-bottom:2px;">${r.name}</div>
-      <div style="font-size:12px;color:var(--grey);">${r.phone} · ${r.tier} — ${r.type}</div>
+<!-- TOPIC 6 -->
+<div class="topic" id="t6">
+  <div class="topic-header"><div class="num">6</div><h2>Data Collection Methods</h2></div>
+  <div class="topic-body">
+    <p>The process of gathering information to answer research questions or test hypotheses.</p>
+    <h3>8 Key Methods</h3>
+    <table>
+      <tr><th>Method</th><th>Data Type</th><th>Tools / Notes</th></tr>
+      <tr><td><strong>Surveys/Questionnaires</strong></td><td>Quantitative</td><td>Google Forms, SurveyMonkey; large samples; Likert scale</td></tr>
+      <tr><td><strong>Interviews</strong></td><td>Qualitative</td><td>Structured / Semi / Unstructured; Zoom, in-person</td></tr>
+      <tr><td><strong>Observations</strong></td><td>Both</td><td>Participant vs. Non-participant</td></tr>
+      <tr><td><strong>Experiments</strong></td><td>Quantitative</td><td>A/B testing, lab simulations</td></tr>
+      <tr><td><strong>Case Studies</strong></td><td>Qualitative</td><td>Deep study of one case over time</td></tr>
+      <tr><td><strong>Focus Groups</strong></td><td>Qualitative</td><td>Group discussions with specific users/professionals</td></tr>
+      <tr><td><strong>Secondary Data</strong></td><td>Both</td><td>Databases, journals, system logs</td></tr>
+      <tr><td><strong>Analytics & Logs</strong></td><td>Quantitative</td><td>Google Analytics, server logs</td></tr>
+    </table>
+    <h3>Steps in Data Collection</h3>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div>Define the research problem</div></div>
+      <div class="step"><div class="step-num">2</div><div>Choose collection method(s)</div></div>
+      <div class="step"><div class="step-num">3</div><div>Design data collection tools</div></div>
+      <div class="step"><div class="step-num">4</div><div>Select participants</div></div>
+      <div class="step"><div class="step-num">5</div><div>Collect data</div></div>
+      <div class="step"><div class="step-num">6</div><div>Analyze the data</div></div>
+      <div class="step"><div class="step-num">7</div><div>Report findings</div></div>
     </div>
-    <div class="rsvp-row"><span class="rsvp-row-label">Amount</span><span class="rsvp-row-val" style="color:var(--gold)">UGX ${Number(r.price||0).toLocaleString()}</span></div>
-    <div class="rsvp-row"><span class="rsvp-row-label">Network</span><span class="rsvp-row-val">${r.momo} · ${r.momoNumber}</span></div>
-    <div class="rsvp-row" style="margin-bottom:14px;"><span class="rsvp-row-label">Transaction ID</span><span class="rsvp-row-val txn">${r.txn}</span></div>
-    <div class="assign-wrap">
-      <div class="assign-wrap-title">Assign Real Ticket ID</div>
-      <select class="form-select" id="verify-ticket-id" style="font-size:12px;">
-        <option value="">— Keep booking ID (${r.id}) —</option>
-        ${opts}
-      </select>
+    <h3>Key Considerations</h3>
+    <ul>
+      <li><strong>Privacy & Security</strong> — anonymize data, use encryption</li>
+      <li><strong>Validity & Reliability</strong> — accurate and repeatable results</li>
+      <li><strong>Sampling</strong> — representative sample ensures generalizability</li>
+      <li><strong>Bias</strong> — use randomized selection to reduce sampling bias</li>
+      <li><strong>Ethics</strong> — informed consent; explain data usage to participants</li>
+    </ul>
+  </div>
+</div>
+
+<!-- TOPIC 7 -->
+<div class="topic" id="t7">
+  <div class="topic-header"><div class="num">7</div><h2>Observation as a Data Collection Tool</h2></div>
+  <div class="topic-body">
+    <p>Watching and recording behaviors/events in real-time. Used to study user interactions with software, hardware, or IT systems.</p>
+    <h3>Types of Observation</h3>
+    <div class="grid2">
+      <div class="card"><h4>Structured</h4><ul><li>Predefined categories (e.g., counting button clicks, task time)</li></ul></div>
+      <div class="card"><h4>Unstructured</h4><ul><li>Open recording; good for complex or unknown behaviors</li></ul></div>
+      <div class="card"><h4>Participant</h4><ul><li>Researcher actively joins in and observes from within</li></ul></div>
+      <div class="card"><h4>Non-participant</h4><ul><li>Researcher observes from a distance without involvement</li></ul></div>
     </div>
-    <div class="form-group" style="margin-top:12px;">
-      <label class="form-label">Notes (optional)</label>
-      <input class="form-input" id="verify-notes" placeholder="e.g. Verified via MTN statement" style="font-size:13px;">
+    <h3>11-Step Observation Process</h3>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div><strong>Define problem & objectives</strong> — clarify focus, metrics (task time, error rate, etc.)</div></div>
+      <div class="step"><div class="step-num">2</div><div><strong>Identify subjects & environment</strong> — who and where</div></div>
+      <div class="step"><div class="step-num">3</div><div><strong>Determine observation method</strong> — structured/unstructured/participant/non-participant</div></div>
+      <div class="step"><div class="step-num">4</div><div><strong>Prepare checklist/guide</strong> — template for recording actions, system responses, user reactions</div></div>
+      <div class="step"><div class="step-num">5</div><div><strong>Set up session</strong> — time, location, equipment, pilot test</div></div>
+      <div class="step"><div class="step-num">6</div><div><strong>Conduct observation</strong> — record key points; remain neutral</div></div>
+      <div class="step"><div class="step-num">7</div><div><strong>Record data</strong> — audio/video, notes, screen recordings</div></div>
+      <div class="step"><div class="step-num">8</div><div><strong>Analyze data</strong> — transcribe, categorize, find patterns</div></div>
+      <div class="step"><div class="step-num">9</div><div><strong>Interpret findings</strong> — synthesize, contextualize, compare with literature</div></div>
+      <div class="step"><div class="step-num">10</div><div><strong>Report findings</strong> — summarize, visualize, recommend</div></div>
+      <div class="step"><div class="step-num">11</div><div><strong>Ethical considerations</strong> — consent, confidentiality, non-intrusive approach</div></div>
     </div>
-    <div style="display:flex;gap:8px;margin-top:14px;">
-      <button class="btn btn-success" style="flex:1" onclick="approveRSVP(${idx})">✅ Approve</button>
-      <button class="btn btn-danger" style="flex:1" onclick="rejectRSVP(${idx});closeModal('modal-verify')">❌ Reject</button>
-    </div>`;
-  openModal('modal-verify');
-}
+  </div>
+</div>
 
-async function approveRSVP(idx){
-  const r=filteredRSVPs[idx]; if(!r) return;
-  const assignedId=document.getElementById('verify-ticket-id')?.value||r.id;
-  const notes=document.getElementById('verify-notes')?.value||'';
-  if(assignedId&&assignedId!==r.id){
-    const t=tickets.find(x=>x.id===assignedId);
-    if(t){t.buyer=r.name;t.phone=r.phone;t.paid=true;save();}
-  }
-  await sheetVerifyRSVP(r.id, assignedId, 'Paid', notes||'Approved by admin');
-  r.status='approved'; r.assignedId=assignedId; r.notes=notes||'Approved by admin';
-  updateVerifyStats(); renderRSVPList(filteredRSVPs);
-  closeModal('modal-verify');
-  showToast(`${r.name} approved! ✅`,'success');
-  renderDashboard();
-}
+<!-- TOPIC 8 -->
+<div class="topic" id="t8">
+  <div class="topic-header"><div class="num">8</div><h2>Research Proposal Writing</h2></div>
+  <div class="topic-body">
+    <p>A structured plan that presents your research idea in an organized and convincing way.</p>
+    <h3>10 Components of a Research Proposal</h3>
+    <table>
+      <tr><th>#</th><th>Component</th><th>What to Include</th></tr>
+      <tr><td>1</td><td><strong>Title</strong></td><td>Clear, specific, reflective of the topic</td></tr>
+      <tr><td>2</td><td><strong>Introduction</strong></td><td>Background, context, problem statement</td></tr>
+      <tr><td>3</td><td><strong>Research Objectives</strong></td><td>Specific, measurable, achievable goals</td></tr>
+      <tr><td>4</td><td><strong>Literature Review</strong></td><td>Existing work, gaps, how yours differs</td></tr>
+      <tr><td>5</td><td><strong>Methodology</strong></td><td>Research design, data collection, analysis, tools</td></tr>
+      <tr><td>6</td><td><strong>Expected Results</strong></td><td>Anticipated outcomes and impact</td></tr>
+      <tr><td>7</td><td><strong>Timeline & Work Plan</strong></td><td>Milestones by month (Gantt chart style)</td></tr>
+      <tr><td>8</td><td><strong>Budget & Resources</strong></td><td>Software, hardware, hosting, etc.</td></tr>
+      <tr><td>9</td><td><strong>Ethical Considerations</strong></td><td>Consent, anonymization, data privacy</td></tr>
+      <tr><td>10</td><td><strong>Conclusion</strong></td><td>Summary of proposal and its significance</td></tr>
+    </table>
+    <h3>Tips for a Strong Proposal</h3>
+    <ul>
+      <li><strong>Clarity & conciseness</strong> — avoid unnecessary jargon</li>
+      <li><strong>Logical structure</strong> — easy to follow flow</li>
+      <li><strong>Feasibility</strong> — realistic given time, budget, resources</li>
+      <li><strong>Relevance</strong> — addresses a significant current problem</li>
+      <li><strong>Originality</strong> — clearly state what is new about your work</li>
+    </ul>
+  </div>
+</div>
 
-async function rejectRSVP(idx){
-  const r=filteredRSVPs[idx]; if(!r) return;
-  if(!confirm(`Reject RSVP from ${r.name}?`)) return;
-  await sheetVerifyRSVP(r.id, r.id, 'Rejected', 'Rejected by admin');
-  r.status='rejected'; updateVerifyStats(); renderRSVPList(filteredRSVPs);
-  showToast('RSVP rejected','error');
-}
+<!-- TOPIC 9 -->
+<div class="topic" id="t9">
+  <div class="topic-header"><div class="num">9</div><h2>Research Report Structure</h2></div>
+  <div class="topic-body">
+    <p>Communicates research results in a structured, systematic manner. Degree level = 6 chapters.</p>
+    <table>
+      <tr><th>Section</th><th>Content</th></tr>
+      <tr><td><strong>Title Page</strong></td><td>Title, researcher, institution, supervisor, date</td></tr>
+      <tr><td><strong>Abstract</strong></td><td>150–300 words: problem, objectives, methods, findings, conclusion</td></tr>
+      <tr><td><strong>Ch. 1: Introduction</strong></td><td>Background, problem statement, objectives, research questions, scope, significance</td></tr>
+      <tr><td><strong>Ch. 2: Literature Review</strong></td><td>Existing research, comparisons, gaps, how your study builds on past work</td></tr>
+      <tr><td><strong>Ch. 3: Methodology</strong></td><td>Research design, data collection, tools, sampling, analysis, ethics</td></tr>
+      <tr><td><strong>Ch. 4: System Design/Implementation</strong></td><td>Requirements, architecture, tools, design diagrams (DFD, ERD)</td></tr>
+      <tr><td><strong>Ch. 5: Results & Findings</strong></td><td>Data presentation (charts, tables), interpretation, patterns/anomalies</td></tr>
+      <tr><td><strong>Ch. 6: Conclusion & Recommendations</strong></td><td>Summary, answers to research questions, recommendations, future research</td></tr>
+      <tr><td><strong>References</strong></td><td>APA-formatted list of all cited sources</td></tr>
+      <tr><td><strong>Appendices</strong></td><td>Questionnaires, raw data, code, documentation</td></tr>
+    </table>
+    <div class="callout"><strong>Methodology section must include:</strong> Research design · Participants · Data collection methods · Analysis techniques · Ethical considerations</div>
+  </div>
+</div>
 
-renderScanLog();
-</script>
+<!-- TOPIC 10 -->
+<div class="topic" id="t10">
+  <div class="topic-header"><div class="num">10</div><h2>Research Methodology (Chapter 3 Content)</h2></div>
+  <div class="topic-body">
+    <div class="grid2">
+      <div class="card"><h4>Research Design</h4><ul><li>Descriptive design is most common</li><li>Explains overall strategy for the study</li></ul></div>
+      <div class="card"><h4>Study Area</h4><ul><li>Where the research takes place and why it was chosen</li></ul></div>
+      <div class="card"><h4>Target Population</h4><ul><li>Staff, users, administrators, management</li><li>Those directly involved with the current system</li></ul></div>
+      <div class="card"><h4>Sampling</h4><ul><li><strong>Purposive</strong> — key informants with knowledge</li><li><strong>Simple random</strong> — other respondents</li></ul></div>
+    </div>
+    <h3>Data Collection</h3>
+    <ul>
+      <li><strong>Primary:</strong> Interviews, Questionnaires, Observation</li>
+      <li><strong>Secondary:</strong> Documents, journals, reports, books</li>
+    </ul>
+    <h3>Data Analysis</h3>
+    <ul>
+      <li><strong>Qualitative</strong> — interpret interviews and observations; understand experiences</li>
+      <li><strong>Quantitative</strong> — tables, charts, percentages from questionnaires</li>
+    </ul>
+    <h3>SDLC — System Development Life Cycle</h3>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div><strong>System Analysis</strong> — Identify problems, determine user requirements</div></div>
+      <div class="step"><div class="step-num">2</div><div><strong>System Design</strong> — Architecture, database, interface design</div></div>
+      <div class="step"><div class="step-num">3</div><div><strong>System Development</strong> — Write code, develop components</div></div>
+      <div class="step"><div class="step-num">4</div><div><strong>System Testing</strong> — Find and correct errors</div></div>
+      <div class="step"><div class="step-num">5</div><div><strong>System Implementation</strong> — Deploy for actual use</div></div>
+      <div class="step"><div class="step-num">6</div><div><strong>System Maintenance</strong> — Update and improve after deployment</div></div>
+    </div>
+    <h3>Ethical Considerations</h3>
+    <ul>
+      <li>Informed consent — participants know the purpose</li>
+      <li>Voluntary participation</li>
+      <li>Confidentiality — data used only for academic purposes</li>
+      <li>Permission from relevant authorities before starting</li>
+    </ul>
+  </div>
+</div>
+
+<!-- TOPIC 11 -->
+<div class="topic" id="t11">
+  <div class="topic-header"><div class="num">11</div><h2>Interview Guide Design</h2></div>
+  <div class="topic-body">
+    <p>Used to collect qualitative, in-depth data from professionals or system users.</p>
+    <table>
+      <tr><th>Section</th><th>Focus</th></tr>
+      <tr><td><strong>Introduction</strong></td><td>Introduce yourself; explain purpose; request consent to record</td></tr>
+      <tr><td><strong>Section 1: Background</strong></td><td>Role, experience, expertise, current responsibilities</td></tr>
+      <tr><td><strong>Section 2: Tech Trends</strong></td><td>Emerging tech, automation, AI impact (next 3–5 years)</td></tr>
+      <tr><td><strong>Section 3: Cybersecurity</strong></td><td>Threats, data privacy, recent security tools</td></tr>
+      <tr><td><strong>Section 4: IT Infrastructure</strong></td><td>On-premise vs. cloud, scalability, multi-cloud environments</td></tr>
+      <tr><td><strong>Section 5: Challenges</strong></td><td>Daily challenges, resource management, problem-solving examples</td></tr>
+      <tr><td><strong>Section 6: Future of IT</strong></td><td>Next decade trends, skill development, education gaps</td></tr>
+      <tr><td><strong>Section 7: Closing</strong></td><td>Advice for newcomers; any final thoughts</td></tr>
+      <tr><td><strong>Post-Interview</strong></td><td>Thank participant; explain next steps for their input</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- TOPIC 12 -->
+<div class="topic" id="t12">
+  <div class="topic-header"><div class="num">12</div><h2>SMART Criteria & Quick Reference</h2></div>
+  <div class="topic-body">
+    <h3>SMART Research Problems</h3>
+    <div class="smart">
+      <div class="smart-item"><div class="letter">S</div><div class="word">Specific</div><div class="desc">Clearly defined, not vague</div></div>
+      <div class="smart-item"><div class="letter">M</div><div class="word">Measurable</div><div class="desc">Can be tracked or evaluated</div></div>
+      <div class="smart-item"><div class="letter">A</div><div class="word">Achievable</div><div class="desc">Realistic within your capacity</div></div>
+      <div class="smart-item"><div class="letter">R</div><div class="word">Realistic</div><div class="desc">Grounded in real-world context</div></div>
+      <div class="smart-item"><div class="letter">T</div><div class="word">Time-bound</div><div class="desc">Completable in a set timeframe</div></div>
+    </div>
+    <h3>Qualitative vs. Quantitative</h3>
+    <table>
+      <tr><th></th><th>Qualitative</th><th>Quantitative</th></tr>
+      <tr><td><strong>Data</strong></td><td>Words, descriptions, experiences</td><td>Numbers, statistics</td></tr>
+      <tr><td><strong>Methods</strong></td><td>Interviews, observations, case studies</td><td>Surveys, experiments, logs</td></tr>
+      <tr><td><strong>Goal</strong></td><td>Understand experiences and context</td><td>Measure and generalize</td></tr>
+      <tr><td><strong>Analysis</strong></td><td>Thematic coding</td><td>Statistical analysis</td></tr>
+    </table>
+    <h3>Primary vs. Secondary Data</h3>
+    <div class="grid2">
+      <div class="card"><h4>Primary Data</h4><ul><li>Collected firsthand by the researcher</li><li>Interviews, questionnaires, observations</li><li>More relevant and specific to your study</li></ul></div>
+      <div class="card"><h4>Secondary Data</h4><ul><li>Already existing data from other sources</li><li>Books, journals, databases, reports</li><li>Supports and validates primary findings</li></ul></div>
+    </div>
+  </div>
+</div>
+
+<!-- ASSESSMENT -->
+<div class="assess">
+  <h2>📊 Course Assessment</h2>
+  <table>
+    <tr><th>#</th><th>Assessment</th><th>Weight</th></tr>
+    <tr><td>1</td><td>Assignment 1 — Concept Paper</td><td>10%</td></tr>
+    <tr><td>2</td><td>Assignment 2 — Literature Review</td><td>10%</td></tr>
+    <tr><td>3</td><td>Assignment 3 — Proposal Draft</td><td>10%</td></tr>
+    <tr><td>4</td><td>Proposal Presentation</td><td>10%</td></tr>
+    <tr><td>5</td><td><strong>End of Semester Examination</strong></td><td><span class="big">60%</span></td></tr>
+  </table>
+  <div style="margin-top:14px; background:rgba(255,255,255,0.1); border-radius:6px; padding:12px;">
+    <strong>🎯 Focus for the exam:</strong> Research process steps · Data collection methods · Proposal components · Report chapter structure · SDLC stages · Qualitative vs. Quantitative
+  </div>
+</div>
+
+</div>
+
+<footer>Research Methods in IT · LAC 2233 · Livingstone International University · Good luck on your exam! 💪</footer>
+
 </body>
 </html>
